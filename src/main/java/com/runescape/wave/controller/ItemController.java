@@ -6,6 +6,7 @@ import com.runescape.wave.model.Items;
 import com.runescape.wave.repository.ItemsRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,12 +70,17 @@ public class ItemController {
         DecimalFormat df = new DecimalFormat("#,###");
         String formattedPrice = df.format(ItemPrice.getItemPrice(itemID));
 
-        boolean todayTrend = false, day30Trend = false, day90Trend = false, day180Trend = false;
+        boolean todayTrend = false;
+        boolean day30Trend = false;
+        boolean day90Trend = false;
+        boolean day180Trend = false;
 
-        if (this.itemTodayTrend.equals("positive")) todayTrend = true;
-        if (this.itemDay30Trend.equals("positive")) day30Trend = true;
-        if (this.itemDay90Trend.equals("positive")) day90Trend = true;
-        if (this.itemDay180Trend.equals("positive")) day180Trend = true;
+        String positive = "positive";
+
+        if (this.itemTodayTrend.equals(positive)) todayTrend = true;
+        if (this.itemDay30Trend.equals(positive)) day30Trend = true;
+        if (this.itemDay90Trend.equals(positive)) day90Trend = true;
+        if (this.itemDay180Trend.equals(positive)) day180Trend = true;
 
         model.addObject("itemIconSmall", this.itemIconSmall);
         model.addObject("itemDescription", this.itemDescription);
@@ -105,18 +111,16 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/createItem", method = RequestMethod.POST)
-    public String createItem(@ModelAttribute("itemsForm") Items itemForm, BindingResult bindingResult, Model model) throws Exception {
+    public String createItem(@ModelAttribute("itemsForm") Items itemForm, BindingResult bindingResult, Model model) throws IOException, ParseException {
         getInfoItem(itemForm.getRunescapeId());
 
-        String itemName = this.itemName;
-
-        itemForm.setNameItem(itemName);
+        itemForm.setNameItem(this.itemName);
         itemsRepository.save(itemForm);
 
         return "redirect:/createItem";
     }
 
-    private void getInfoItem(Long itemId) throws Exception {
+    private void getInfoItem(Long itemId) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
         URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=" + itemId);
@@ -131,6 +135,8 @@ public class ItemController {
 
         FileWriter fw = new FileWriter(file.getAbsoluteFile());
         BufferedWriter bw = new BufferedWriter(fw);
+
+        fw.close();
 
         while ((inputLine = br.readLine()) != null) {
             bw.write(inputLine);

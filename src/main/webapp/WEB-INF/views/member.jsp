@@ -68,7 +68,7 @@
 				</div>
 			</div>
 		</div>
-		<%@include file="footer.jsp" %>
+	<%@include file="footer.jsp" %>
 	</div>
 <script>
 	var clickAdventurersLog = document.getElementById('clickAdventurersLog');

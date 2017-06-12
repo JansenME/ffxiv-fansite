@@ -88,7 +88,7 @@ public class MembersListController {
                 counter++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            list.add("Something went wrong with connecting to the API of RuneScape.");
         }
         list.remove(0);
 

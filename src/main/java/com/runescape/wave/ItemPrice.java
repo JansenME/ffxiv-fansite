@@ -3,9 +3,11 @@ package com.runescape.wave;
 import com.github.wnameless.json.flattener.JsonFlattener;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
@@ -16,7 +18,10 @@ import java.util.TreeSet;
  * Created by Martijn Jansen on 6/10/2017.
  */
 public class ItemPrice {
-    public static BigDecimal getItemPrice(Long itemID) throws Exception {
+    private ItemPrice() {
+    }
+
+    public static BigDecimal getItemPrice(Long itemID) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
 
         URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/graph/" + itemID + ".json");
