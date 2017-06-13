@@ -2,6 +2,11 @@ package com.runescape.wave.controller;
 
 import com.runescape.wave.model.Member;
 import com.runescape.wave.repository.MemberRepository;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +22,8 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,34 +67,27 @@ public class MembersInfoController {
     private List<String> getAdventurersLogList(String name) {
         List <String> list = new ArrayList<>();
         try {
-            URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(rssUrl.openStream()));
+            final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
+            final SyndFeedInput input = new SyndFeedInput();
+            final SyndFeed feed = input.build(new XmlReader(rssUrl));
 
-            String line;
+            for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
+                LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
 
-            while ((line = br.readLine()) != null) {
-                String adventurersLogTitle;
-                if (line.contains(OPENTAGTITLE)) {
-                    int firstPos = line.indexOf(OPENTAGTITLE);
-                    adventurersLogTitle = line.substring(firstPos);
-                    adventurersLogTitle = adventurersLogTitle.replace(OPENTAGTITLE, "");
-                    int lastPos = adventurersLogTitle.indexOf("</title>");
-                    adventurersLogTitle = adventurersLogTitle.substring(0, lastPos);
-                    list.add(adventurersLogTitle);
-                }
-
+                String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                String title = entry.getTitle();
+                String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
+                list.add("<p style='font-weight:bold;'>" + formattedDate + " - " + title + "</p>" + description);
             }
-            list.remove(0);
-            list.remove(0);
-            br.close();
 
             return list;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
             list.add("Something went wrong. Probably this member of the clan is not a member on Runescape. Just so you know, this is not my fault. I'm still awesome...");
             return list;
+        } catch (FeedException e) {
+            list.add("Something went wrong. The feed is not being read in the correct way.");
+            return list;
         } catch (IOException e) {
-            e.printStackTrace();
             list.add("Something went wrong");
             return list;
         }
