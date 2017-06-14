@@ -26,7 +26,7 @@
 					<thead><tr><th width='30%'>Name</th><th width='30%'>Rank</th><th width='30%'>Experience since joined clan</th><th width='10%'>PvP kills</th></tr></thead>
 					<tbody>
 						<c:forEach var="listValue" items="${list}">
-							${listValue}
+							<tr><td><a href='member/${listValue.name}'>${listValue.name}</a></td><td>${listValue.rank}</td><td><fmt:formatNumber type = "number" maxFractionDigits = "3" value = "${listValue.experience}" /></td><td>${listValue.kills}</td></tr>
 						</c:forEach>
 					</tbody>
 				</table>
