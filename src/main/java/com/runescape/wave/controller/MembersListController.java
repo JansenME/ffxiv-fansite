@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class MembersListController {
     }
 
     @RequestMapping(value = "/members", method = RequestMethod.GET)
-    public ModelAndView getMembers() throws Exception {
+    public ModelAndView getMembers() throws IOException {
 
         List<MembersInList> list = setMembersList();
 
@@ -50,10 +49,9 @@ public class MembersListController {
         return model;
     }
 
-    private List<MembersInList> setMembersList() {
-        List<MembersInList> list = new ArrayList<MembersInList>();
+    private List<MembersInList> setMembersList() throws IOException {
+        List<MembersInList> list = new ArrayList<>();
 
-        try {
             URL link = new URL("http://services.runescape.com/m=clan-hiscores/members_lite.ws?clanName=Wave");
             BufferedReader br = new BufferedReader(new InputStreamReader(link.openStream()));
 
@@ -83,9 +81,6 @@ public class MembersListController {
                 }
                 counter++;
             }
-        } catch (Exception e) {
-
-        }
 
         return list;
     }

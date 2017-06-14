@@ -196,37 +196,8 @@ public class MembersInfoController {
             int counter = 0;
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
-                switch (counter) {
-                    case 0: skill = OVERALL; break;
-                    case 1: skill = "attack"; break;
-                    case 2: skill = "defence"; break;
-                    case 3: skill = "strength"; break;
-                    case 4: skill = "constitution"; break;
-                    case 5: skill = "ranged"; break;
-                    case 6: skill = "prayer"; break;
-                    case 7: skill = "magic"; break;
-                    case 8: skill = "cooking"; break;
-                    case 9: skill = "woodcutting"; break;
-                    case 10: skill = "fletching"; break;
-                    case 11: skill = "fishing"; break;
-                    case 12: skill = "firemaking"; break;
-                    case 13: skill = "crafting"; break;
-                    case 14: skill = "smithing"; break;
-                    case 15: skill = "mining"; break;
-                    case 16: skill = "herblore"; break;
-                    case 17: skill = "agility"; break;
-                    case 18: skill = "thieving"; break;
-                    case 19: skill = "slayer"; break;
-                    case 20: skill = "farming"; break;
-                    case 21: skill = "runecrafting"; break;
-                    case 22: skill = "hunter"; break;
-                    case 23: skill = "construction"; break;
-                    case 24: skill = "summoning"; break;
-                    case 25: skill = DUNGEONEERING; break;
-                    case 26: skill = "divination"; break;
-                    case 27: skill = INVENTION; break;
-                    default: skill = UNKNOWN; break;
-                }
+
+                skill = getCorrectSkillName(counter);
 
                 String skillUpperCase = skill.substring(0, 1).toUpperCase() + skill.substring(1);
 
@@ -240,110 +211,56 @@ public class MembersInfoController {
                 String array0Formatted = numberFormat.format(array0Int);
 
                 int array1Int = Integer.parseInt(array[1]);
+                String array1String = "" + array1Int;
 
                 if (array1Int == 0) array[1] = "1";
                 if (array2Int == -1) array2Formatted = "0";
                 if (array0Int == -1) array0Formatted = "None";
 
-                //Set virtual levels
-                if (array2Int >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "100";
-                if (array2Int >= 15889109 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "101";
-                if (array2Int >= 17542976 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "102";
-                if (array2Int >= 19368992 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "103";
-                if (array2Int >= 21385073 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "104";
-                if (array2Int >= 23611006 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "105";
-                if (array2Int >= 26068632 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "106";
-                if (array2Int >= 28782069 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "107";
-                if (array2Int >= 31777943 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "108";
-                if (array2Int >= 35085654 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "109";
-                if (array2Int >= 38737661 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "110";
-                if (array2Int >= 42769801 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "111";
-                if (array2Int >= 47221641 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "112";
-                if (array2Int >= 52136869 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "113";
-                if (array2Int >= 57563718 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "114";
-                if (array2Int >= 63555443 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "115";
-                if (array2Int >= 70170840 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "116";
-                if (array2Int >= 77474828 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "117";
-                if (array2Int >= 85539082 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "118";
-                if (array2Int >= 94442737 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "119";
-                if (array2Int >= 104273167 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "120";
-
-                //Set virtual levels for Elite skills
-                if (array2Int >= 83370445 && skill.equals(INVENTION)) array[1] = "121";
-                if (array2Int >= 86186124 && skill.equals(INVENTION)) array[1] = "122";
-                if (array2Int >= 89066630 && skill.equals(INVENTION)) array[1] = "123";
-                if (array2Int >= 92012904 && skill.equals(INVENTION)) array[1] = "124";
-                if (array2Int >= 95025896 && skill.equals(INVENTION)) array[1] = "125";
-                if (array2Int >= 98106559 && skill.equals(INVENTION)) array[1] = "126";
-                if (array2Int >= 101255855 && skill.equals(INVENTION)) array[1] = "127";
-                if (array2Int >= 104474750 && skill.equals(INVENTION)) array[1] = "128";
-                if (array2Int >= 107764216 && skill.equals(INVENTION)) array[1] = "129";
-                if (array2Int >= 111125230 && skill.equals(INVENTION)) array[1] = "130";
-                if (array2Int >= 114558777 && skill.equals(INVENTION)) array[1] = "131";
-                if (array2Int >= 118065845 && skill.equals(INVENTION)) array[1] = "132";
-                if (array2Int >= 121647430 && skill.equals(INVENTION)) array[1] = "133";
-                if (array2Int >= 125304532 && skill.equals(INVENTION)) array[1] = "134";
-                if (array2Int >= 129038159 && skill.equals(INVENTION)) array[1] = "135";
-                if (array2Int >= 132849323 && skill.equals(INVENTION)) array[1] = "136";
-                if (array2Int >= 136739041 && skill.equals(INVENTION)) array[1] = "137";
-                if (array2Int >= 140708338 && skill.equals(INVENTION)) array[1] = "138";
-                if (array2Int >= 144758242 && skill.equals(INVENTION)) array[1] = "139";
-                if (array2Int >= 148889790 && skill.equals(INVENTION)) array[1] = "140";
-                if (array2Int >= 153104021 && skill.equals(INVENTION)) array[1] = "141";
-                if (array2Int >= 157401983 && skill.equals(INVENTION)) array[1] = "142";
-                if (array2Int >= 161784728 && skill.equals(INVENTION)) array[1] = "143";
-                if (array2Int >= 166253312 && skill.equals(INVENTION)) array[1] = "144";
-                if (array2Int >= 170808801 && skill.equals(INVENTION)) array[1] = "145";
-                if (array2Int >= 175452262 && skill.equals(INVENTION)) array[1] = "146";
-                if (array2Int >= 180184770 && skill.equals(INVENTION)) array[1] = "147";
-                if (array2Int >= 185007406 && skill.equals(INVENTION)) array[1] = "148";
-                if (array2Int >= 189921255 && skill.equals(INVENTION)) array[1] = "149";
-                if (array2Int >= 194927409 && skill.equals(INVENTION)) array[1] = "150";
-                if (array2Int >= 200000000 && skill.equals(INVENTION)) array[1] = array2Formatted;
-
-                int levelAsInt = Integer.parseInt(array[1]);
+                String correctVirtualLevel = setCorrectVirtualLevel(array2Int, skill, array1String);
+                int CorrectVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
 
                 if (skill.equals(OVERALL)) {
-                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                 }
                 else {
                     if (skill.equals(DUNGEONEERING)) {
                         if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
-                        else if (levelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        else if (CorrectVirtualLevelAsInt == 120) {
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                     }
                     else if (skill.equals(INVENTION)) {
                         if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
-                        else if (levelAsInt == 150) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        else if (CorrectVirtualLevelAsInt == 150) {
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
-                        else if (levelAsInt >= 120) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        else if (CorrectVirtualLevelAsInt >= 120) {
+                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                     }
                     else {
                         if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
-                        else if (levelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        else if (CorrectVirtualLevelAsInt == 120) {
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
-                        else if (levelAsInt >= 99) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        else if (CorrectVirtualLevelAsInt >= 99) {
+                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
                         }
                     }
                 }
@@ -370,111 +287,28 @@ public class MembersInfoController {
             int counter = 0;
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
-                switch (counter) {
-                    case 0: skill = OVERALL; break;
-                    case 1: skill = "attack"; break;
-                    case 2: skill = "defence"; break;
-                    case 3: skill = "strength"; break;
-                    case 4: skill = "constitution"; break;
-                    case 5: skill = "ranged"; break;
-                    case 6: skill = "prayer"; break;
-                    case 7: skill = "magic"; break;
-                    case 8: skill = "cooking"; break;
-                    case 9: skill = "woodcutting"; break;
-                    case 10: skill = "fletching"; break;
-                    case 11: skill = "fishing"; break;
-                    case 12: skill = "firemaking"; break;
-                    case 13: skill = "crafting"; break;
-                    case 14: skill = "smithing"; break;
-                    case 15: skill = "mining"; break;
-                    case 16: skill = "herblore"; break;
-                    case 17: skill = "agility"; break;
-                    case 18: skill = "thieving"; break;
-                    case 19: skill = "slayer"; break;
-                    case 20: skill = "farming"; break;
-                    case 21: skill = "runecrafting"; break;
-                    case 22: skill = "hunter"; break;
-                    case 23: skill = "construction"; break;
-                    case 24: skill = "summoning"; break;
-                    case 25: skill = DUNGEONEERING; break;
-                    case 26: skill = "divination"; break;
-                    case 27: skill = INVENTION; break;
-                    default: skill = UNKNOWN; break;
-                }
+
+                skill = getCorrectSkillName(counter);
 
                 Locale locale = new Locale("en", "EN");
                 NumberFormat numberFormat = NumberFormat.getInstance(locale);
 
-                int array2Int = Integer.parseInt(array[2]);
-                String array2Formatted = numberFormat.format(array2Int);
+                int experienceLevel = Integer.parseInt(array[2]);
+                String experienceLevelFormatted = numberFormat.format(experienceLevel);
 
-                int array1Int = Integer.parseInt(array[1]);
+                int level = Integer.parseInt(array[1]);
 
-                if (array1Int == 0) {
+                if (level == 0) {
                     array[1] = "1";
                 }
 
-                if (array2Int == -1) {
-                    array2Formatted = "0";
+                if (experienceLevel == -1) {
+                    experienceLevelFormatted = "0";
                 }
 
-                //Set virtual levels
-                if (array2Int >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "100";
-                if (array2Int >= 15889109 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "101";
-                if (array2Int >= 17542976 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "102";
-                if (array2Int >= 19368992 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "103";
-                if (array2Int >= 21385073 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "104";
-                if (array2Int >= 23611006 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "105";
-                if (array2Int >= 26068632 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "106";
-                if (array2Int >= 28782069 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "107";
-                if (array2Int >= 31777943 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "108";
-                if (array2Int >= 35085654 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "109";
-                if (array2Int >= 38737661 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "110";
-                if (array2Int >= 42769801 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "111";
-                if (array2Int >= 47221641 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "112";
-                if (array2Int >= 52136869 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "113";
-                if (array2Int >= 57563718 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "114";
-                if (array2Int >= 63555443 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "115";
-                if (array2Int >= 70170840 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "116";
-                if (array2Int >= 77474828 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "117";
-                if (array2Int >= 85539082 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "118";
-                if (array2Int >= 94442737 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "119";
-                if (array2Int >= 104273167 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "120";
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceLevel, skill, array[1]);
 
-                //Set virtual levels for Elite skills
-                if (array2Int >= 83370445 && skill.equals(INVENTION)) array[1] = "121";
-                if (array2Int >= 86186124 && skill.equals(INVENTION)) array[1] = "122";
-                if (array2Int >= 89066630 && skill.equals(INVENTION)) array[1] = "123";
-                if (array2Int >= 92012904 && skill.equals(INVENTION)) array[1] = "124";
-                if (array2Int >= 95025896 && skill.equals(INVENTION)) array[1] = "125";
-                if (array2Int >= 98106559 && skill.equals(INVENTION)) array[1] = "126";
-                if (array2Int >= 101255855 && skill.equals(INVENTION)) array[1] = "127";
-                if (array2Int >= 104474750 && skill.equals(INVENTION)) array[1] = "128";
-                if (array2Int >= 107764216 && skill.equals(INVENTION)) array[1] = "129";
-                if (array2Int >= 111125230 && skill.equals(INVENTION)) array[1] = "130";
-                if (array2Int >= 114558777 && skill.equals(INVENTION)) array[1] = "131";
-                if (array2Int >= 118065845 && skill.equals(INVENTION)) array[1] = "132";
-                if (array2Int >= 121647430 && skill.equals(INVENTION)) array[1] = "133";
-                if (array2Int >= 125304532 && skill.equals(INVENTION)) array[1] = "134";
-                if (array2Int >= 129038159 && skill.equals(INVENTION)) array[1] = "135";
-                if (array2Int >= 132849323 && skill.equals(INVENTION)) array[1] = "136";
-                if (array2Int >= 136739041 && skill.equals(INVENTION)) array[1] = "137";
-                if (array2Int >= 140708338 && skill.equals(INVENTION)) array[1] = "138";
-                if (array2Int >= 144758242 && skill.equals(INVENTION)) array[1] = "139";
-                if (array2Int >= 148889790 && skill.equals(INVENTION)) array[1] = "140";
-                if (array2Int >= 153104021 && skill.equals(INVENTION)) array[1] = "141";
-                if (array2Int >= 157401983 && skill.equals(INVENTION)) array[1] = "142";
-                if (array2Int >= 161784728 && skill.equals(INVENTION)) array[1] = "143";
-                if (array2Int >= 166253312 && skill.equals(INVENTION)) array[1] = "144";
-                if (array2Int >= 170808801 && skill.equals(INVENTION)) array[1] = "145";
-                if (array2Int >= 175452262 && skill.equals(INVENTION)) array[1] = "146";
-                if (array2Int >= 180184770 && skill.equals(INVENTION)) array[1] = "147";
-                if (array2Int >= 185007406 && skill.equals(INVENTION)) array[1] = "148";
-                if (array2Int >= 189921255 && skill.equals(INVENTION)) array[1] = "149";
-                if (array2Int >= 194927409 && skill.equals(INVENTION)) array[1] = "150";
-                if (array2Int >= 200000000 && skill.equals(INVENTION)) array[1] = array2Formatted;
-
-                totalLevel = Integer.parseInt(array[1]);
+                totalLevel = Integer.parseInt(correctVirtualLevel);
 
                 if (!skill.equals(OVERALL)) {
                     totalVirtualLevel += totalLevel;
@@ -488,5 +322,99 @@ public class MembersInfoController {
         }
 
         return totalVirtualLevel;
+    }
+
+    private static String getCorrectSkillName(int counter) {
+        switch (counter) {
+            case 0: return OVERALL;
+            case 1: return "attack";
+            case 2: return "defence";
+            case 3: return "strength";
+            case 4: return "constitution";
+            case 5: return "ranged";
+            case 6: return "prayer";
+            case 7: return "magic";
+            case 8: return "cooking";
+            case 9: return "woodcutting";
+            case 10: return "fletching";
+            case 11: return "fishing";
+            case 12: return "firemaking";
+            case 13: return "crafting";
+            case 14: return "smithing";
+            case 15: return "mining";
+            case 16: return "herblore";
+            case 17: return "agility";
+            case 18: return "thieving";
+            case 19: return "slayer";
+            case 20: return "farming";
+            case 21: return "runecrafting";
+            case 22: return "hunter";
+            case 23: return "construction";
+            case 24: return "summoning";
+            case 25: return DUNGEONEERING;
+            case 26: return "divination";
+            case 27: return INVENTION;
+            default: return UNKNOWN;
+        }
+    }
+
+    private static String setCorrectVirtualLevel(int totalExperience, String skill, String level) {
+        //Set virtual levels
+        if (totalExperience >= 104273167 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "120";
+        if (totalExperience >= 94442737 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "119";
+        if (totalExperience >= 85539082 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "118";
+        if (totalExperience >= 77474828 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "117";
+        if (totalExperience >= 70170840 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "116";
+        if (totalExperience >= 63555443 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "115";
+        if (totalExperience >= 57563718 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "114";
+        if (totalExperience >= 52136869 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "113";
+        if (totalExperience >= 47221641 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "112";
+        if (totalExperience >= 42769801 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "111";
+        if (totalExperience >= 38737661 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "110";
+        if (totalExperience >= 35085654 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "109";
+        if (totalExperience >= 31777943 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "108";
+        if (totalExperience >= 28782069 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "107";
+        if (totalExperience >= 26068632 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "106";
+        if (totalExperience >= 23611006 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "105";
+        if (totalExperience >= 21385073 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "104";
+        if (totalExperience >= 19368992 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "103";
+        if (totalExperience >= 17542976 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "102";
+        if (totalExperience >= 15889109 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "101";
+        if (totalExperience >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "100";
+
+        //Set virtual levels for Elite skills
+        if (totalExperience >= 200000000 && skill.equals(INVENTION)) return level;
+        if (totalExperience >= 194927409 && skill.equals(INVENTION)) return "150";
+        if (totalExperience >= 189921255 && skill.equals(INVENTION)) return "149";
+        if (totalExperience >= 185007406 && skill.equals(INVENTION)) return "148";
+        if (totalExperience >= 180184770 && skill.equals(INVENTION)) return "147";
+        if (totalExperience >= 175452262 && skill.equals(INVENTION)) return "146";
+        if (totalExperience >= 170808801 && skill.equals(INVENTION)) return "145";
+        if (totalExperience >= 166253312 && skill.equals(INVENTION)) return "144";
+        if (totalExperience >= 161784728 && skill.equals(INVENTION)) return "143";
+        if (totalExperience >= 157401983 && skill.equals(INVENTION)) return "142";
+        if (totalExperience >= 153104021 && skill.equals(INVENTION)) return "141";
+        if (totalExperience >= 148889790 && skill.equals(INVENTION)) return "140";
+        if (totalExperience >= 144758242 && skill.equals(INVENTION)) return "139";
+        if (totalExperience >= 140708338 && skill.equals(INVENTION)) return "138";
+        if (totalExperience >= 136739041 && skill.equals(INVENTION)) return "137";
+        if (totalExperience >= 132849323 && skill.equals(INVENTION)) return "136";
+        if (totalExperience >= 129038159 && skill.equals(INVENTION)) return "135";
+        if (totalExperience >= 125304532 && skill.equals(INVENTION)) return "134";
+        if (totalExperience >= 121647430 && skill.equals(INVENTION)) return "133";
+        if (totalExperience >= 118065845 && skill.equals(INVENTION)) return "132";
+        if (totalExperience >= 114558777 && skill.equals(INVENTION)) return "131";
+        if (totalExperience >= 111125230 && skill.equals(INVENTION)) return "130";
+        if (totalExperience >= 107764216 && skill.equals(INVENTION)) return "129";
+        if (totalExperience >= 104474750 && skill.equals(INVENTION)) return "128";
+        if (totalExperience >= 101255855 && skill.equals(INVENTION)) return "127";
+        if (totalExperience >= 98106559 && skill.equals(INVENTION)) return "126";
+        if (totalExperience >= 95025896 && skill.equals(INVENTION)) return "125";
+        if (totalExperience >= 92012904 && skill.equals(INVENTION)) return "124";
+        if (totalExperience >= 89066630 && skill.equals(INVENTION)) return "123";
+        if (totalExperience >= 86186124 && skill.equals(INVENTION)) return "122";
+        if (totalExperience >= 83370445 && skill.equals(INVENTION)) return "121";
+
+        return level;
     }
 }
