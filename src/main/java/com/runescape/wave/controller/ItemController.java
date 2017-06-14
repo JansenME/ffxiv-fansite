@@ -57,7 +57,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/item/{ownItemID}", method = RequestMethod.GET)
-    public ModelAndView showItem(@PathVariable Long ownItemID) throws Exception {
+    public ModelAndView showItem(@PathVariable Long ownItemID) throws IOException, ParseException {
 
         Items item = itemsRepository.findOne(ownItemID);
 

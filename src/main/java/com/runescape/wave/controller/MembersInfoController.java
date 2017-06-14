@@ -34,7 +34,6 @@ import java.util.Locale;
  */
 @Controller
 public class MembersInfoController {
-    private static final String OPENTAGTITLE = "<title>";
     private static final String UNKNOWN = "unknown";
     private static final String INVENTION = "invention";
     private static final String DUNGEONEERING = "dungeoneering";
@@ -46,7 +45,7 @@ public class MembersInfoController {
     private MemberRepository memberRepository;
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
-    public ModelAndView getMemberLevels(@PathVariable String name) {
+    public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException {
         List<String> memberLevelsList = getMemberLevelsList(name);
         List<String> adventurersLogList = getAdventurersLogList(name);
 
@@ -93,7 +92,7 @@ public class MembersInfoController {
         }
     }
 
-    private String getMemberTableInfo(Member member) {
+    private String getMemberTableInfo(Member member) throws ParseException {
         //Get correct lines for biography
         String biography;
 
@@ -158,11 +157,8 @@ public class MembersInfoController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String date = "" + member.getDateOfBirth();
             Date d = null;
-            try {
-                d = dateFormat.parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
+            d = dateFormat.parse(date);
 
             dateFormat.applyPattern("MM/dd/yyy");
 
@@ -245,17 +241,9 @@ public class MembersInfoController {
 
                 int array1Int = Integer.parseInt(array[1]);
 
-                if (array1Int == 0) {
-                    array[1] = "1";
-                }
-
-                if (array2Int == -1) {
-                    array2Formatted = "0";
-                }
-
-                if (array0Int == -1) {
-                    array0Formatted = "None";
-                }
+                if (array1Int == 0) array[1] = "1";
+                if (array2Int == -1) array2Formatted = "0";
+                if (array0Int == -1) array0Formatted = "None";
 
                 //Set virtual levels
                 if (array2Int >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) array[1] = "100";
