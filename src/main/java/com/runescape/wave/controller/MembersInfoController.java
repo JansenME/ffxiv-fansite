@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 /**
  * Created by Martijn Jansen on 6/10/2017.
@@ -191,7 +190,7 @@ public class MembersInfoController {
                 String array0Formatted = numberFormat.format(array0Int);
 
                 int array1Int = Integer.parseInt(array[1]);
-                String array1String = "" + array1Int;
+                String array1String = Integer.toString(array1Int);
 
                 if (array1Int == 0) array[1] = "1";
                 if (array2Int == -1) array2Formatted = "0";
