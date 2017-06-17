@@ -1,7 +1,5 @@
 package com.runescape.wave.model;
 
-import org.apache.tomcat.jni.Local;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.text.ParseException;
@@ -52,7 +50,7 @@ public class Member {
 
     @Transient
     public void setDob(String dob) throws ParseException {
-        String newDob = dob;
+        String newDob;
 
         if (dateOfBirth == null) newDob = UNKNOWN;
         else {
@@ -76,7 +74,7 @@ public class Member {
 
     @Transient
     public void setCityStateCountry(String city, String state, String country) {
-        String cityStateCountry;
+        String newCityStateCountry;
 
         String newCity;
         String newState;
@@ -91,10 +89,10 @@ public class Member {
         if (country == null) newCountry = UNKNOWN;
         else newCountry = country;
 
-        if (city == null && state == null && country == null) cityStateCountry = UNKNOWN;
-        else cityStateCountry = city + ", " + state + ", " + country;
+        if (city == null && state == null && country == null) newCityStateCountry = UNKNOWN;
+        else newCityStateCountry = newCity + ", " + newState + ", " + newCountry;
 
-        this.cityStateCountry = cityStateCountry;
+        this.cityStateCountry = newCityStateCountry;
     }
 
     @Id
