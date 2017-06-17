@@ -23,7 +23,7 @@
 				<table class="table table-striped" style="text-align:center; width:50%; margin:auto;">
 					<tbody>
 						<c:forEach var="listValue" items="${itemList}">
-							${listValue}
+							<tr><td><a href='/item/${listValue.id}'>${listValue.nameItem}</a></td></tr>
 						</c:forEach>
 					</tbody>
 				</table>

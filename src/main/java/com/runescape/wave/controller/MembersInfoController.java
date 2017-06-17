@@ -1,5 +1,6 @@
 package com.runescape.wave.controller;
 
+import com.runescape.wave.model.AdventurersLogInList;
 import com.runescape.wave.model.Member;
 import com.runescape.wave.repository.MemberRepository;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -15,20 +16,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,15 +39,13 @@ public class MembersInfoController {
     private static final String DUNGEONEERING = "dungeoneering";
     private static final String OVERALL = "overall";
 
-    private int totalVirtualLevel = 0;
-
     @Autowired
     private MemberRepository memberRepository;
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
-    public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException {
+    public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException, IOException, FeedException {
         List<String> memberLevelsList = getMemberLevelsList(name);
-        List<String> adventurersLogList = getAdventurersLogList(name);
+        List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
 
         ModelAndView model = new ModelAndView("member");
         model.addObject("listLevels", memberLevelsList);
@@ -60,42 +55,32 @@ public class MembersInfoController {
         Member member = memberRepository.findOneByName(name);
 
         if (member != null) {
+            model.addObject("showTableMember", true);
             model.addObject("tableInfo", getMemberTableInfo(member));
         }
 
         return model;
     }
 
-    private List<String> getAdventurersLogList(String name) {
-        List <String> list = new ArrayList<>();
-        try {
-            final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
-            final SyndFeedInput input = new SyndFeedInput();
-            final SyndFeed feed = input.build(new XmlReader(rssUrl));
+    private List<AdventurersLogInList> getAdventurersLogList(String name) throws IOException, FeedException {
+        List <AdventurersLogInList> list = new ArrayList<>();
 
-            for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
-                LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
+        final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
+        final SyndFeedInput input = new SyndFeedInput();
+        final SyndFeed feed = input.build(new XmlReader(rssUrl));
 
-                String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-                String title = entry.getTitle();
-                String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
-                list.add("<p style='font-weight:bold;'>" + formattedDate + " - " + title + "</p>" + description);
-            }
+        for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
+            LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
 
-            return list;
-        } catch (FileNotFoundException e) {
-            list.add("Something went wrong. Probably this member of the clan is not a member on Runescape. Just so you know, this is not my fault. I'm still awesome...");
-            return list;
-        } catch (FeedException e) {
-            list.add("Something went wrong. The feed is not being read in the correct way.");
-            return list;
-        } catch (IOException e) {
-            list.add("Something went wrong");
-            return list;
+            String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            String title = entry.getTitle();
+            String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
+            list.add(new AdventurersLogInList(formattedDate, title, description));
         }
+        return list;
     }
 
-    private String getMemberTableInfo(Member member) throws ParseException {
+    private Member getMemberTableInfo(Member member) throws ParseException {
         //Get correct lines for biography
         String biography;
 
@@ -109,58 +94,15 @@ public class MembersInfoController {
         else gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
 
         //Get the correct lines for the city
-        String cityStateCountry;
-
-        String city;
-        String state;
-        String country;
-
-        if (member.getCity() == null) city = UNKNOWN;
-        else city = member.getCity();
-
-        if (member.getState() == null) state = UNKNOWN;
-        else state = member.getState();
-
-        if (member.getCountry() == null) country = UNKNOWN;
-        else country = member.getCountry();
-
-        if (member.getCity() == null && member.getState() == null && member.getCountry() == null) cityStateCountry = UNKNOWN;
-        else cityStateCountry = city + ", " + state + ", " + country;
+        member.setCityStateCountry(member.getCity(), member.getState(), member.getCountry());
+        String cityStateCountry = member.getCityStateCountry();
 
         //Get the correct date format
-        String dob;
-        if (member.getDateOfBirth() == null) {
-            dob = UNKNOWN;
-        }
-        else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String date = "" + member.getDateOfBirth();
-            Date d = null;
-
-            d = dateFormat.parse(date);
-
-            dateFormat.applyPattern("MM/dd/yyy");
-
-            LocalDate now = LocalDate.now();
-
-            Period age = Period.between(member.getDateOfBirth().toLocalDate(), now);
-
-            dob = dateFormat.format(d) + " (" + age.getYears() + ")";
-        }
+        member.setDob(member.getDateOfBirth().toString());
+        String dob = member.getDob();
 
         //Make the correct string for the ModelAndView
-        return "<table style='width:100%;'>"
-                + "<tr>"
-                + "<td style='width:60%; padding:5px; text-align:justify; text-align-last:center; vertical-align: text-top;'>" + biography + "</td>"
-                + "<td>"
-                + "<table>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>Gender: </strong></td><td style='padding:5px;'>" + gender + "</td></tr>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>Date of Birth: </strong></td><td style='padding:5px;'>" + dob + "</td></tr>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>City: </strong></td><td style='padding:5px;'>" + cityStateCountry + "</td></tr>"
-                + "</table>"
-                + "</td>"
-                + "</tr>"
-                + "</table>";
+        return new Member(biography, gender, dob, cityStateCountry);
     }
 
     private List<String> getMemberLevelsList(String name) {
@@ -250,7 +192,6 @@ public class MembersInfoController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        totalVirtualLevel = 0;
         return list;
     }
 

@@ -27,7 +27,20 @@
 					</tr>
 				</table>
 
-				${tableInfo}`
+				<c:if test="${showTableMember}">
+					<table style='width:100%;'>
+						<tr>
+							<td style='width:60%; padding:5px; text-align:justify; text-align-last:center; vertical-align: text-top;'>${tableInfo.biography}</td>
+							<td>
+								<table>
+									<tr><td style='padding:5px; text-align:right;'><strong>Gender: </strong></td><td style='padding:5px;'>${tableInfo.gender}</td></tr>
+									<tr><td style='padding:5px; text-align:right;'><strong>Date of Birth: </strong></td><td style='padding:5px;'>${tableInfo.dob}</td></tr>
+									<tr><td style='padding:5px; text-align:right;'><strong>City: </strong></td><td style='padding:5px;'>${tableInfo.cityStateCountry}</td></tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</c:if>
 
 				<table style="border:0px; margin:auto; width:100%; text-align:center;">
 					<tr>
@@ -50,7 +63,7 @@
 						<thead><tr><td> </td></tr></thead>
 						<tbody>
 							<c:forEach var="listValue" items="${listAdventurersLog}">
-								<tr><td>${listValue}</td></tr>
+								<tr><td><p style='font-weight:bold;'>${listValue.formattedDate} - ${listValue.title}</p>${listValue.description}</td></tr>
 							</c:forEach>
 						</tbody>
 					</table>

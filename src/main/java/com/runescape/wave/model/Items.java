@@ -19,11 +19,6 @@ public class Items {
     private Long levelNeeded;
     private String skill;
 
-    @Override
-    public String toString() {
-        return "<tr><td><a href='/item/" + id + "'>" + nameItem + "</a></td></tr>";
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {

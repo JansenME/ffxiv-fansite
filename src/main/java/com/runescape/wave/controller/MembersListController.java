@@ -67,12 +67,8 @@ public class MembersListController {
                     String experience = array[2];
                     String kills = array[3];
 
-                    int experienceAsInt = 0;
-                    int killsAsInt = 0;
-
-                    experienceAsInt = Integer.parseInt(experience);
-
-                    killsAsInt = Integer.parseInt(kills);
+                    int experienceAsInt = Integer.parseInt(experience);
+                    int killsAsInt = Integer.parseInt(kills);
 
                     this.totalExperienceClan += experienceAsInt;
 
