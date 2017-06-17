@@ -118,6 +118,10 @@ public class MembersInfoController {
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
 
+                String rank = array[0];
+                String level = array[1];
+                String experience = array[2];
+
                 skill = getCorrectSkillName(counter);
 
                 String skillUpperCase = skill.substring(0, 1).toUpperCase() + skill.substring(1);
@@ -125,63 +129,63 @@ public class MembersInfoController {
                 Locale locale = new Locale("en", "EN");
                 NumberFormat numberFormat = NumberFormat.getInstance(locale);
 
-                int array2Int = Integer.parseInt(array[2]);
-                String array2Formatted = numberFormat.format(array2Int);
+                int experienceAsInt = Integer.parseInt(experience);
+                String experienceFormatted = numberFormat.format(experienceAsInt);
 
-                int array0Int = Integer.parseInt(array[0]);
-                String array0Formatted = numberFormat.format(array0Int);
+                int rankAsInt = Integer.parseInt(rank);
+                String rankFormatted = numberFormat.format(rankAsInt);
 
-                int array1Int = Integer.parseInt(array[1]);
-                String array1String = Integer.toString(array1Int);
+                int levelAsInt = Integer.parseInt(level);
+                String levelAsString = Integer.toString(levelAsInt);
 
-                if (array1Int == 0) array[1] = "1";
-                if (array2Int == -1) array2Formatted = "0";
-                if (array0Int == -1) array0Formatted = "None";
+                if (levelAsInt == 0) level = "1";
+                if (experienceAsInt == -1) experienceFormatted = "0";
+                if (rankAsInt == -1) rankFormatted = "None";
 
-                String correctVirtualLevel = setCorrectVirtualLevel(array2Int, skill, array1String);
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, levelAsString);
                 int CorrectVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
 
                 if (skill.equals(OVERALL)) {
-                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                 }
                 else {
                     if (skill.equals(DUNGEONEERING)) {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        if (experienceAsInt == 200000000) {
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else if (CorrectVirtualLevelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                     }
                     else if (skill.equals(INVENTION)) {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        if (experienceAsInt == 200000000) {
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else if (CorrectVirtualLevelAsInt == 150) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else if (CorrectVirtualLevelAsInt >= 120) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                     }
                     else {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                        if (experienceAsInt == 200000000) {
+                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else if (CorrectVirtualLevelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else if (CorrectVirtualLevelAsInt >= 99) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
+                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                     }
                 }
@@ -210,20 +214,12 @@ public class MembersInfoController {
 
                 skill = getCorrectSkillName(counter);
 
-                Locale locale = new Locale("en", "EN");
-                NumberFormat numberFormat = NumberFormat.getInstance(locale);
-
                 int experienceLevel = Integer.parseInt(array[2]);
-                String experienceLevelFormatted = numberFormat.format(experienceLevel);
 
                 int level = Integer.parseInt(array[1]);
 
                 if (level == 0) {
                     array[1] = "1";
-                }
-
-                if (experienceLevel == -1) {
-                    experienceLevelFormatted = "0";
                 }
 
                 String correctVirtualLevel = setCorrectVirtualLevel(experienceLevel, skill, array[1]);
