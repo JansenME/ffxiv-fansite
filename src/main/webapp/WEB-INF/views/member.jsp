@@ -26,7 +26,8 @@
 						<td style='padding:5px; text-align:left; width:20%;'><img src="http://services.runescape.com/m=avatar-rs/${memberName}/full.png" /></td>
 					</tr>
 				</table>
-				${tableInfo}
+
+				${tableInfo}`
 
 				<table style="border:0px; margin:auto; width:100%; text-align:center;">
 					<tr>

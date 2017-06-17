@@ -22,12 +22,16 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 /**
  * Created by Martijn Jansen on 6/10/2017.
@@ -96,22 +100,14 @@ public class MembersInfoController {
         //Get correct lines for biography
         String biography;
 
-        if (member.getBiography() == null) {
-            biography = "This member did not give us an amazing text about themself!";
-        }
-        else {
-            biography = member.getBiography();
-        }
+        if (member.getBiography() == null) biography = "This member did not give us an amazing text about themself!";
+        else biography = member.getBiography();
 
         //Capitalize gender
         String gender;
 
-        if (member.getGender() == null) {
-            gender = UNKNOWN;
-        }
-        else {
-            gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
-        }
+        if (member.getGender() == null) gender = UNKNOWN;
+        else gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
 
         //Get the correct lines for the city
         String cityStateCountry;
@@ -120,33 +116,17 @@ public class MembersInfoController {
         String state;
         String country;
 
-        if (member.getCity() == null) {
-            city = UNKNOWN;
-        }
-        else {
-            city = member.getCity();
-        }
+        if (member.getCity() == null) city = UNKNOWN;
+        else city = member.getCity();
 
-        if (member.getState() == null) {
-            state = UNKNOWN;
-        }
-        else {
-            state = member.getState();
-        }
+        if (member.getState() == null) state = UNKNOWN;
+        else state = member.getState();
 
-        if (member.getCountry() == null) {
-            country = UNKNOWN;
-        }
-        else {
-            country = member.getCountry();
-        }
+        if (member.getCountry() == null) country = UNKNOWN;
+        else country = member.getCountry();
 
-        if (member.getCity() == null && member.getState() == null && member.getCountry() == null) {
-            cityStateCountry = UNKNOWN;
-        }
-        else {
-            cityStateCountry = city + ", " + state + ", " + country;
-        }
+        if (member.getCity() == null && member.getState() == null && member.getCountry() == null) cityStateCountry = UNKNOWN;
+        else cityStateCountry = city + ", " + state + ", " + country;
 
         //Get the correct date format
         String dob;

@@ -1,12 +1,11 @@
 package com.runescape.wave.controller;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
+import com.google.gson.*;
 import com.runescape.wave.ItemPrice;
 import com.runescape.wave.model.Items;
 import com.runescape.wave.repository.ItemsRepository;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,8 @@ import java.util.List;
 public class ItemController {
     @Autowired
     private ItemsRepository itemsRepository;
+
+    private static final String POSITIVE = "positive";
 
     private String itemIconSmall = null;
     private String itemDescription = null;
@@ -57,7 +58,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/item/{ownItemID}", method = RequestMethod.GET)
-    public ModelAndView showItem(@PathVariable Long ownItemID) throws IOException, ParseException {
+    public ModelAndView showItem(@PathVariable Long ownItemID) throws IOException {
 
         Items item = itemsRepository.findOne(ownItemID);
 
@@ -75,12 +76,10 @@ public class ItemController {
         boolean day90Trend = false;
         boolean day180Trend = false;
 
-        String positive = "positive";
-
-        if (this.itemTodayTrend.equals(positive)) todayTrend = true;
-        if (this.itemDay30Trend.equals(positive)) day30Trend = true;
-        if (this.itemDay90Trend.equals(positive)) day90Trend = true;
-        if (this.itemDay180Trend.equals(positive)) day180Trend = true;
+        if (this.itemTodayTrend.equals(POSITIVE)) todayTrend = true;
+        if (this.itemDay30Trend.equals(POSITIVE)) day30Trend = true;
+        if (this.itemDay90Trend.equals(POSITIVE)) day90Trend = true;
+        if (this.itemDay180Trend.equals(POSITIVE)) day180Trend = true;
 
         model.addObject("itemIconSmall", this.itemIconSmall);
         model.addObject("itemDescription", this.itemDescription);
@@ -111,7 +110,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/createItem", method = RequestMethod.POST)
-    public String createItem(@ModelAttribute("itemsForm") Items itemForm, BindingResult bindingResult, Model model) throws IOException, ParseException {
+    public String createItem(@ModelAttribute("itemsForm") Items itemForm, BindingResult bindingResult, Model model) throws IOException {
         getInfoItem(itemForm.getRunescapeId());
 
         itemForm.setNameItem(this.itemName);
@@ -120,48 +119,30 @@ public class ItemController {
         return "redirect:/createItem";
     }
 
-    private void getInfoItem(Long itemId) throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-
+    private void getInfoItem(Long itemId) throws IOException {
         URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=" + itemId);
         URLConnection conn = link.openConnection();
 
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-        String inputLine;
+        JsonParser jp = new JsonParser();
+        JsonElement root = jp.parse(br);
 
-        String fileName = "src/main/resources/json/" + itemId + ".json";
-        File file = new File(fileName);
+        JsonObject jsonObject = root.getAsJsonObject();
 
-        FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        BufferedWriter bw = new BufferedWriter(fw);
-
-        fw.close();
-
-        while ((inputLine = br.readLine()) != null) {
-            bw.write(inputLine);
-        }
-
-        bw.close();
-        br.close();
-
-        Object obj = parser.parse(new FileReader("src/main/resources/json/" + itemId + ".json"));
-
-        JSONObject jsonObject = (JSONObject) obj;
-
-        this.itemIconSmall = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.icon");
-        this.itemDescription = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.description");
-        this.itemIconLarge = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.icon_large");
-        this.itemName = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.name");
-        this.itemType = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.type");
-        this.itemTodayTrend = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.today.trend");
-        this.itemTodayPrice = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.today.price");
-        this.itemMembers = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.members");
-        this.itemDay30Trend = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day30.trend");
-        this.itemDay30Change = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day30.change");
-        this.itemDay90Trend = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day90.trend");
-        this.itemDay90Change = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day90.change");
-        this.itemDay180Trend = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day180.trend");
-        this.itemDay180Change = (String) JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day180.change");
+        this.itemIconSmall = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.icon").toString();
+        this.itemDescription = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.description").toString();
+        this.itemIconLarge = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.icon_large").toString();
+        this.itemName = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.name").toString();
+        this.itemType = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.type").toString();
+        this.itemTodayTrend = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.today.trend").toString();
+        this.itemTodayPrice = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.today.price").toString();
+        this.itemMembers = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.members").toString();
+        this.itemDay30Trend = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day30.trend").toString();
+        this.itemDay30Change = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day30.change").toString();
+        this.itemDay90Trend = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day90.trend").toString();
+        this.itemDay90Change = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day90.change").toString();
+        this.itemDay180Trend = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day180.trend").toString();
+        this.itemDay180Change = JsonFlattener.flattenAsMap(jsonObject.toString()).get("item.day180.change").toString();
     }
 }
