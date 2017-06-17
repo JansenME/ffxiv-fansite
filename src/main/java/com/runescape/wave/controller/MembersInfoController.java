@@ -143,7 +143,7 @@ public class MembersInfoController {
                 if (rankAsInt == -1) rankFormatted = "None";
 
                 String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, levelAsString);
-                int CorrectVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
+                int correctVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
 
                 if (skill.equals(OVERALL)) {
                     list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
@@ -153,7 +153,7 @@ public class MembersInfoController {
                         if (experienceAsInt == 200000000) {
                             list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
-                        else if (CorrectVirtualLevelAsInt == 120) {
+                        else if (correctVirtualLevelAsInt == 120) {
                             list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
@@ -164,10 +164,10 @@ public class MembersInfoController {
                         if (experienceAsInt == 200000000) {
                             list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
-                        else if (CorrectVirtualLevelAsInt == 150) {
+                        else if (correctVirtualLevelAsInt == 150) {
                             list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
-                        else if (CorrectVirtualLevelAsInt >= 120) {
+                        else if (correctVirtualLevelAsInt >= 120) {
                             list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
@@ -178,10 +178,10 @@ public class MembersInfoController {
                         if (experienceAsInt == 200000000) {
                             list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
-                        else if (CorrectVirtualLevelAsInt == 120) {
+                        else if (correctVirtualLevelAsInt == 120) {
                             list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
-                        else if (CorrectVirtualLevelAsInt >= 99) {
+                        else if (correctVirtualLevelAsInt >= 99) {
                             list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                         }
                         else {
@@ -299,7 +299,7 @@ public class MembersInfoController {
         if (totalExperience >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "100";
 
         //Set virtual levels for Elite skills
-        if (totalExperience >= 200000000 && skill.equals(INVENTION)) return level;
+        if (totalExperience >= 200000000 && skill.equals(INVENTION)) return "150";
         if (totalExperience >= 194927409 && skill.equals(INVENTION)) return "150";
         if (totalExperience >= 189921255 && skill.equals(INVENTION)) return "149";
         if (totalExperience >= 185007406 && skill.equals(INVENTION)) return "148";
