@@ -148,45 +148,35 @@ public class MembersInfoController {
                 if (skill.equals(OVERALL)) {
                     list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                 }
+                else if (skill.equals(DUNGEONEERING)) {
+                    if (experienceAsInt == 200000000) {
+                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else if (correctVirtualLevelAsInt == 120) {
+                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else {
+                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    }
+                }
+                else if (skill.equals(INVENTION)) {
+                    if (experienceAsInt == 200000000) {
+                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else if (correctVirtualLevelAsInt == 150) {
+                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else if (correctVirtualLevelAsInt >= 120) {
+                        list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else {
+                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    }
+                }
                 else {
-                    if (skill.equals(DUNGEONEERING)) {
-                        if (experienceAsInt == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else if (correctVirtualLevelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                    }
-                    else if (skill.equals(INVENTION)) {
-                        if (experienceAsInt == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else if (correctVirtualLevelAsInt == 150) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else if (correctVirtualLevelAsInt >= 120) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                    }
-                    else {
-                        if (experienceAsInt == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else if (correctVirtualLevelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else if (correctVirtualLevelAsInt >= 99) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                        }
+                    if (experienceAsInt == 200000000) {
+                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else if (correctVirtualLevelAsInt == 120) {
+                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else if (correctVirtualLevelAsInt >= 99) {
+                        list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
+                    } else {
+                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
                     }
                 }
                 counter++;
