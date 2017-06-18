@@ -75,7 +75,36 @@
 						<thead><tr><th width="3%"></th><th>Skill</th><th>Level</th><th style='text-align:right;'>Experience</th><th style='text-align:right;'>Rank</th></tr></thead>
 						<tbody>
 							<c:forEach var="listValue" items="${listLevels}">
-								${listValue}
+								<c:choose>
+									<c:when test="${listValue.color == 'bold'}">
+										<tr style='font-weight:bold;'>
+									</c:when>
+									<c:when test="${listValue.color == 'red'}">
+										<tr style='color:red; font-weight:bold;'>
+									</c:when>
+									<c:when test="${listValue.color == 'limegreen'}">
+										<tr style='color:limegreen; font-weight:bold;'>
+									</c:when>
+									<c:otherwise>
+										<tr>
+									</c:otherwise>
+								</c:choose>
+
+								<td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/${listValue.name}.png' /></td>
+								<td>${listValue.nameUppercase}</td>
+
+								<c:choose>
+									<c:when test="${listValue.name == 'overall'}">
+										<td>${listValue.correctVirtualLevel} (${listValue.totalVirtualLevel})</td>
+									</c:when>
+									<c:otherwise>
+										<td>${listValue.correctVirtualLevel}</td>
+									</c:otherwise>
+								</c:choose>
+
+									<td align="right">${listValue.experienceFormatted}</td>
+									<td align="right">${listValue.rankFormatted}</td>
+								</tr>
 							</c:forEach>
 						</tbody>
 					</table>

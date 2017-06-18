@@ -10,21 +10,17 @@ public class SkillsInList {
     private String experienceFormatted;
     private String rankFormatted;
 
-    private boolean ifOverall;
     private String totalVirtualLevel;
     private String color;
 
-    public SkillsInList() {
+    public SkillsInList() {}
 
-    }
-
-    public SkillsInList(String name, String correctVirtualLevel, String experienceFormatted, String rankFormatted, boolean ifOverall, String totalVirtualLevel, String color) {
+    public SkillsInList(String name, String correctVirtualLevel, String experienceFormatted, String rankFormatted, String totalVirtualLevel, String color) {
         this.name = name;
         this.nameUppercase = name.substring(0, 1).toUpperCase() + name.substring(1);
         this.correctVirtualLevel = correctVirtualLevel;
         this.experienceFormatted = experienceFormatted;
         this.rankFormatted = rankFormatted;
-        this.ifOverall = ifOverall;
         this.totalVirtualLevel = totalVirtualLevel;
         this.color = color;
     }
@@ -59,14 +55,6 @@ public class SkillsInList {
 
     public void setRankFormatted(String rankFormatted) {
         this.rankFormatted = rankFormatted;
-    }
-
-    public boolean isIfOverall() {
-        return ifOverall;
-    }
-
-    public void setIfOverall(boolean ifOverall) {
-        this.ifOverall = ifOverall;
     }
 
     public String getTotalVirtualLevel() {

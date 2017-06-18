@@ -2,6 +2,7 @@ package com.runescape.wave.controller;
 
 import com.runescape.wave.model.AdventurersLogInList;
 import com.runescape.wave.model.Member;
+import com.runescape.wave.model.SkillsInList;
 import com.runescape.wave.repository.MemberRepository;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -44,7 +45,7 @@ public class MembersInfoController {
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
     public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException, IOException, FeedException {
-        List<String> memberLevelsList = getMemberLevelsList(name);
+        List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
         List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
 
         ModelAndView model = new ModelAndView("member");
@@ -105,8 +106,8 @@ public class MembersInfoController {
         return new Member(biography, gender, dob, cityStateCountry);
     }
 
-    private List<String> getMemberLevelsList(String name) {
-        List<String> list = new ArrayList<>();
+    private List<SkillsInList> getMemberLevelsList(String name) {
+        List<SkillsInList> list = new ArrayList<>();
 
         try {
             URL link = new URL("http://services.runescape.com/m=hiscore/index_lite.ws?player=" + name);
@@ -114,7 +115,9 @@ public class MembersInfoController {
 
             String inputLine;
             String skill;
+
             int counter = 0;
+
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
 
@@ -123,8 +126,6 @@ public class MembersInfoController {
                 String experience = array[2];
 
                 skill = getCorrectSkillName(counter);
-
-                String skillUpperCase = skill.substring(0, 1).toUpperCase() + skill.substring(1);
 
                 Locale locale = new Locale("en", "EN");
                 NumberFormat numberFormat = NumberFormat.getInstance(locale);
@@ -136,49 +137,18 @@ public class MembersInfoController {
                 String rankFormatted = numberFormat.format(rankAsInt);
 
                 int levelAsInt = Integer.parseInt(level);
-                String levelAsString = Integer.toString(levelAsInt);
 
                 if (levelAsInt == 0) level = "1";
                 if (experienceAsInt == -1) experienceFormatted = "0";
                 if (rankAsInt == -1) rankFormatted = "None";
 
-                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, levelAsString);
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, level);
                 int correctVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
 
-                if (skill.equals(OVERALL)) {
-                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                }
-                else if (skill.equals(DUNGEONEERING)) {
-                    if (experienceAsInt == 200000000) {
-                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else if (correctVirtualLevelAsInt == 120) {
-                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else {
-                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    }
-                }
-                else if (skill.equals(INVENTION)) {
-                    if (experienceAsInt == 200000000) {
-                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else if (correctVirtualLevelAsInt == 150) {
-                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else if (correctVirtualLevelAsInt >= 120) {
-                        list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else {
-                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    }
-                }
-                else {
-                    if (experienceAsInt == 200000000) {
-                        list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else if (correctVirtualLevelAsInt == 120) {
-                        list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else if (correctVirtualLevelAsInt >= 99) {
-                        list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    } else {
-                        list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + correctVirtualLevel + "</td><td align='right'>" + experienceFormatted + "</td><td align='right'>" + rankFormatted + "</td></tr>");
-                    }
-                }
+                String color = getTheCorrectColor(skill, experienceAsInt, correctVirtualLevelAsInt);
+
+                String totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
+                list.add(new SkillsInList(skill, correctVirtualLevel, experienceFormatted, rankFormatted, totalVirtualLevel, color));
                 counter++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -187,6 +157,34 @@ public class MembersInfoController {
             e.printStackTrace();
         }
         return list;
+    }
+
+    private String getTheCorrectColor(String skill, int experienceAsInt, int correctVirtualLevelAsInt) {
+        final String colorRed = "red";
+        final String colorLimegreen = "limegreen";
+        final String colorBold = "bold";
+        final String colorNormal = "normal";
+
+        if (skill.equals(OVERALL)) {
+            return colorNormal;
+        }
+        else if (skill.equals(DUNGEONEERING)) {
+            if (experienceAsInt == 200000000) return colorRed;
+            else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+            else return colorNormal;
+        }
+        else if (skill.equals(INVENTION)) {
+            if (experienceAsInt == 200000000) return colorRed;
+            else if (correctVirtualLevelAsInt == 150) return colorLimegreen;
+            else if (correctVirtualLevelAsInt >= 120) return colorBold;
+            else return colorNormal;
+        }
+        else {
+            if (experienceAsInt == 200000000) return colorRed;
+            else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+            else if (correctVirtualLevelAsInt >= 99) return colorBold;
+            else return colorNormal;
+        }
     }
 
     private int getTotalVirtualLevel(String nameMember) {
