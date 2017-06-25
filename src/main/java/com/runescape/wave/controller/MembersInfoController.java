@@ -147,7 +147,9 @@ public class MembersInfoController {
 
                 String color = getTheCorrectColor(skill, experienceAsInt, correctVirtualLevelAsInt);
 
-                String totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
+                String totalVirtualLevel = null;
+                if (skill == OVERALL) totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
+
                 list.add(new SkillsInList(skill, correctVirtualLevel, experienceFormatted, rankFormatted, totalVirtualLevel, color));
                 counter++;
             }

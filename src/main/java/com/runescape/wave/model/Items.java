@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.util.Comparator;
 
 /**
  * Created by Martijn Jansen on 6/10/2017.
@@ -15,7 +17,7 @@ public class Items {
 
     private String nameItem;
 
-    private Long experience;
+    private BigDecimal experience;
     private Long levelNeeded;
     private String skill;
 
@@ -45,11 +47,11 @@ public class Items {
         this.nameItem = nameItem;
     }
 
-    public Long getExperience() {
+    public BigDecimal getExperience() {
         return experience;
     }
 
-    public void setExperience(Long experience) {
+    public void setExperience(BigDecimal experience) {
         this.experience = experience;
     }
 

@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,6 +55,13 @@ public class ItemController {
     public ModelAndView itemList() {
         List<Items> itemList = (itemsRepository).findAll();
 
+        Collections.sort(itemList, new Comparator<Items>() {
+            @Override
+            public int compare(final Items item1, final Items item2) {
+                return item1.getNameItem().compareToIgnoreCase(item2.getNameItem());
+            }
+        });
+
         ModelAndView model = new ModelAndView("items");
         model.addObject("itemList", itemList);
 
@@ -81,6 +92,12 @@ public class ItemController {
         if (this.itemDay90Trend.equals(POSITIVE)) day90Trend = true;
         if (this.itemDay180Trend.equals(POSITIVE)) day180Trend = true;
 
+        String experience = item.getExperience().toString();
+
+        if (experience.contains(".0")) {
+            experience = experience.substring(0 , experience.length() - 2);
+        }
+
         model.addObject("itemIconSmall", this.itemIconSmall);
         model.addObject("itemDescription", this.itemDescription);
         model.addObject("itemIconLarge", this.itemIconLarge);
@@ -96,7 +113,7 @@ public class ItemController {
         model.addObject("itemDay180Trend", day180Trend);
         model.addObject("itemDay180Change", this.itemDay180Change);
         model.addObject("itemPrice", formattedPrice);
-        model.addObject("itemExperience", item.getExperience());
+        model.addObject("itemExperience", experience);
         model.addObject("itemLevelNeeded", item.getLevelNeeded());
         model.addObject("itemSkill", item.getSkill());
         return model;

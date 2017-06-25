@@ -13,8 +13,6 @@ public class SkillsInList {
     private String totalVirtualLevel;
     private String color;
 
-    public SkillsInList() {}
-
     public SkillsInList(String name, String correctVirtualLevel, String experienceFormatted, String rankFormatted, String totalVirtualLevel, String color) {
         this.name = name;
         this.nameUppercase = name.substring(0, 1).toUpperCase() + name.substring(1);
