@@ -148,7 +148,7 @@ public class MembersInfoController {
                 String color = getTheCorrectColor(skill, experienceAsInt, correctVirtualLevelAsInt);
 
                 String totalVirtualLevel = null;
-                if (skill == OVERALL) totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
+                if (OVERALL.equals(skill)) totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
 
                 list.add(new SkillsInList(skill, correctVirtualLevel, experienceFormatted, rankFormatted, totalVirtualLevel, color));
                 counter++;
@@ -167,25 +167,26 @@ public class MembersInfoController {
         final String colorBold = "bold";
         final String colorNormal = "normal";
 
-        if (skill.equals(OVERALL)) {
-            return colorNormal;
-        }
-        else if (skill.equals(DUNGEONEERING)) {
-            if (experienceAsInt == 200000000) return colorRed;
-            else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
-            else return colorNormal;
-        }
-        else if (skill.equals(INVENTION)) {
-            if (experienceAsInt == 200000000) return colorRed;
-            else if (correctVirtualLevelAsInt == 150) return colorLimegreen;
-            else if (correctVirtualLevelAsInt >= 120) return colorBold;
-            else return colorNormal;
-        }
-        else {
-            if (experienceAsInt == 200000000) return colorRed;
-            else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
-            else if (correctVirtualLevelAsInt >= 99) return colorBold;
-            else return colorNormal;
+        switch (skill) {
+            case OVERALL:
+                return colorNormal;
+
+            case DUNGEONEERING:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+                else return colorNormal;
+
+            case INVENTION:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 150) return colorLimegreen;
+                else if (correctVirtualLevelAsInt >= 120) return colorBold;
+                else return colorNormal;
+
+            default:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+                else if (correctVirtualLevelAsInt >= 99) return colorBold;
+                else return colorNormal;
         }
     }
 
@@ -289,7 +290,6 @@ public class MembersInfoController {
         if (totalExperience >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "100";
 
         //Set virtual levels for Elite skills
-        if (totalExperience >= 200000000 && skill.equals(INVENTION)) return "150";
         if (totalExperience >= 194927409 && skill.equals(INVENTION)) return "150";
         if (totalExperience >= 189921255 && skill.equals(INVENTION)) return "149";
         if (totalExperience >= 185007406 && skill.equals(INVENTION)) return "148";
