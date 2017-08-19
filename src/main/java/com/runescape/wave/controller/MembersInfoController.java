@@ -154,7 +154,7 @@ public class MembersInfoController {
                 counter++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            return list;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -223,7 +223,7 @@ public class MembersInfoController {
                 counter++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            return totalVirtualLevel;
         } catch (Exception e) {
             e.printStackTrace();
         }

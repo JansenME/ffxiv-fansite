@@ -19,14 +19,20 @@ import java.util.TreeSet;
  * Created by Martijn Jansen on 6/10/2017.
  */
 public class ItemPrice {
-    private ItemPrice() {
+    ItemPrice(){
+
     }
 
-    public static BigDecimal getItemPrice(Long itemID) throws IOException {
-        URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/graph/" + itemID + ".json");
-        URLConnection conn = link.openConnection();
+    public static BigDecimal getItemPrice(URL link) {
+        BufferedReader br;
+        URLConnection conn;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        try {
+            conn = link.openConnection();
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } catch (IOException ioe) {
+            return BigDecimal.valueOf(0);
+        }
 
         JsonParser jp = new JsonParser();
         JsonElement root = jp.parse(br);
