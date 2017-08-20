@@ -4,6 +4,8 @@ import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,22 +17,24 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-/**
- * Created by Martijn Jansen on 6/10/2017.
- */
 public class ItemPrice {
-    ItemPrice(){
+    private static final Logger logger = LoggerFactory.getLogger(ItemPrice.class);
 
+    ItemPrice(){
+        logger.info("I'm not supposed to be in tis ItemPrice constructor.");
     }
 
-    public static BigDecimal getItemPrice(URL link) {
+    public static BigDecimal getItemPrice(URL link, Long itemId) {
+        logger.info("I'm going to try and get the item price for item with id {}", itemId);
         BufferedReader br;
         URLConnection conn;
 
         try {
             conn = link.openConnection();
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            logger.info("I succesfully got a stream for you.");
         } catch (IOException ioe) {
+            logger.error("I failed getting a stream.");
             return BigDecimal.valueOf(0);
         }
 
@@ -41,6 +45,7 @@ public class ItemPrice {
 
         Map<String, Object> flattenedJsonMap = JsonFlattener.flattenAsMap(jsonObject.toString());
         SortedSet<String> keys = new TreeSet<>(flattenedJsonMap.keySet());
+        logger.info("I succesfully got a price ({})", flattenedJsonMap.get(keys.last()));
         return (BigDecimal) flattenedJsonMap.get(keys.last());
     }
 }

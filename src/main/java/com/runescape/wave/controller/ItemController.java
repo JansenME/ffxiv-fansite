@@ -82,7 +82,7 @@ public class ItemController {
 
         DecimalFormat df = new DecimalFormat("#,###");
         URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/graph/" + itemID + ".json");
-        String formattedPrice = df.format(ItemPrice.getItemPrice(link));
+        String formattedPrice = df.format(ItemPrice.getItemPrice(link, itemID));
 
         boolean todayTrend = false;
         boolean day30Trend = false;
