@@ -9,6 +9,8 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Martijn Jansen on 6/10/2017.
- */
 @Controller
 public class MembersInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(MembersInfoController.class);
+
     private static final String UNKNOWN = "unknown";
     private static final String INVENTION = "invention";
     private static final String DUNGEONEERING = "dungeoneering";
@@ -45,6 +46,7 @@ public class MembersInfoController {
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
     public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException, IOException, FeedException {
+        logger.info("In method getMemberLevels...");
         List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
         List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
 
@@ -64,6 +66,7 @@ public class MembersInfoController {
     }
 
     private List<AdventurersLogInList> getAdventurersLogList(String name) throws IOException, FeedException {
+        logger.info("In method getAdventurersLogList...");
         List <AdventurersLogInList> list = new ArrayList<>();
 
         final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
@@ -82,6 +85,7 @@ public class MembersInfoController {
     }
 
     private Member getMemberTableInfo(Member member) throws ParseException {
+        logger.info("In method getMemberTableInfo...");
         //Get correct lines for biography
         String biography;
 
@@ -107,6 +111,7 @@ public class MembersInfoController {
     }
 
     private List<SkillsInList> getMemberLevelsList(String name) {
+        logger.info("In method getMemberLevelsList...");
         List<SkillsInList> list = new ArrayList<>();
 
         try {
@@ -162,6 +167,7 @@ public class MembersInfoController {
     }
 
     private String getTheCorrectColor(String skill, int experienceAsInt, int correctVirtualLevelAsInt) {
+        logger.info("In method getTheCorrectColor...");
         final String colorRed = "red";
         final String colorLimegreen = "limegreen";
         final String colorBold = "bold";
@@ -191,6 +197,7 @@ public class MembersInfoController {
     }
 
     private int getTotalVirtualLevel(String nameMember) {
+        logger.info("In method getTotalVirtualLevel...");
         int totalLevel = 0;
         int totalVirtualLevel = 0;
         try {
@@ -232,6 +239,7 @@ public class MembersInfoController {
     }
 
     private static String getCorrectSkillName(int counter) {
+        logger.info("In method getCorrectSkillName...");
         switch (counter) {
             case 0: return OVERALL;
             case 1: return "attack";
@@ -265,61 +273,75 @@ public class MembersInfoController {
         }
     }
 
-    private static String setCorrectVirtualLevel(int totalExperience, String skill, String level) {
-        //Set virtual levels
-        if (totalExperience >= 104273167 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "120";
-        if (totalExperience >= 94442737 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "119";
-        if (totalExperience >= 85539082 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "118";
-        if (totalExperience >= 77474828 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "117";
-        if (totalExperience >= 70170840 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "116";
-        if (totalExperience >= 63555443 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "115";
-        if (totalExperience >= 57563718 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "114";
-        if (totalExperience >= 52136869 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "113";
-        if (totalExperience >= 47221641 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "112";
-        if (totalExperience >= 42769801 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "111";
-        if (totalExperience >= 38737661 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "110";
-        if (totalExperience >= 35085654 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "109";
-        if (totalExperience >= 31777943 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "108";
-        if (totalExperience >= 28782069 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "107";
-        if (totalExperience >= 26068632 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "106";
-        if (totalExperience >= 23611006 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "105";
-        if (totalExperience >= 21385073 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "104";
-        if (totalExperience >= 19368992 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "103";
-        if (totalExperience >= 17542976 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "102";
-        if (totalExperience >= 15889109 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "101";
-        if (totalExperience >= 14391160 && !skill.equals(OVERALL) && !skill.equals(INVENTION)) return "100";
+    private static String setCorrectVirtualLevel(final int totalExperience, final String skill, final String level) {
+        logger.info("In method setCorrectVirtualLevel...");
+        String levelToReturn = level;
 
-        //Set virtual levels for Elite skills
-        if (totalExperience >= 194927409 && skill.equals(INVENTION)) return "150";
-        if (totalExperience >= 189921255 && skill.equals(INVENTION)) return "149";
-        if (totalExperience >= 185007406 && skill.equals(INVENTION)) return "148";
-        if (totalExperience >= 180184770 && skill.equals(INVENTION)) return "147";
-        if (totalExperience >= 175452262 && skill.equals(INVENTION)) return "146";
-        if (totalExperience >= 170808801 && skill.equals(INVENTION)) return "145";
-        if (totalExperience >= 166253312 && skill.equals(INVENTION)) return "144";
-        if (totalExperience >= 161784728 && skill.equals(INVENTION)) return "143";
-        if (totalExperience >= 157401983 && skill.equals(INVENTION)) return "142";
-        if (totalExperience >= 153104021 && skill.equals(INVENTION)) return "141";
-        if (totalExperience >= 148889790 && skill.equals(INVENTION)) return "140";
-        if (totalExperience >= 144758242 && skill.equals(INVENTION)) return "139";
-        if (totalExperience >= 140708338 && skill.equals(INVENTION)) return "138";
-        if (totalExperience >= 136739041 && skill.equals(INVENTION)) return "137";
-        if (totalExperience >= 132849323 && skill.equals(INVENTION)) return "136";
-        if (totalExperience >= 129038159 && skill.equals(INVENTION)) return "135";
-        if (totalExperience >= 125304532 && skill.equals(INVENTION)) return "134";
-        if (totalExperience >= 121647430 && skill.equals(INVENTION)) return "133";
-        if (totalExperience >= 118065845 && skill.equals(INVENTION)) return "132";
-        if (totalExperience >= 114558777 && skill.equals(INVENTION)) return "131";
-        if (totalExperience >= 111125230 && skill.equals(INVENTION)) return "130";
-        if (totalExperience >= 107764216 && skill.equals(INVENTION)) return "129";
-        if (totalExperience >= 104474750 && skill.equals(INVENTION)) return "128";
-        if (totalExperience >= 101255855 && skill.equals(INVENTION)) return "127";
-        if (totalExperience >= 98106559 && skill.equals(INVENTION)) return "126";
-        if (totalExperience >= 95025896 && skill.equals(INVENTION)) return "125";
-        if (totalExperience >= 92012904 && skill.equals(INVENTION)) return "124";
-        if (totalExperience >= 89066630 && skill.equals(INVENTION)) return "123";
-        if (totalExperience >= 86186124 && skill.equals(INVENTION)) return "122";
-        if (totalExperience >= 83370445 && skill.equals(INVENTION)) return "121";
+        if (INVENTION.equals(skill) && totalExperience >= 83370445) levelToReturn = setVirtualLevelForInvention(totalExperience, level);
+        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && totalExperience >= 14391160) levelToReturn = setVirtualLevelForTheRest(totalExperience, level);
+
+        return levelToReturn;
+    }
+
+    private static String setVirtualLevelForInvention(final int totalExperience, final String level) {
+        logger.info("In method setVirtualLevelForInvention...");
+        if (totalExperience >= 194927409) return "150";
+        if (totalExperience >= 189921255) return "149";
+        if (totalExperience >= 185007406) return "148";
+        if (totalExperience >= 180184770) return "147";
+        if (totalExperience >= 175452262) return "146";
+        if (totalExperience >= 170808801) return "145";
+        if (totalExperience >= 166253312) return "144";
+        if (totalExperience >= 161784728) return "143";
+        if (totalExperience >= 157401983) return "142";
+        if (totalExperience >= 153104021) return "141";
+        if (totalExperience >= 148889790) return "140";
+        if (totalExperience >= 144758242) return "139";
+        if (totalExperience >= 140708338) return "138";
+        if (totalExperience >= 136739041) return "137";
+        if (totalExperience >= 132849323) return "136";
+        if (totalExperience >= 129038159) return "135";
+        if (totalExperience >= 125304532) return "134";
+        if (totalExperience >= 121647430) return "133";
+        if (totalExperience >= 118065845) return "132";
+        if (totalExperience >= 114558777) return "131";
+        if (totalExperience >= 111125230) return "130";
+        if (totalExperience >= 107764216) return "129";
+        if (totalExperience >= 104474750) return "128";
+        if (totalExperience >= 101255855) return "127";
+        if (totalExperience >= 98106559) return "126";
+        if (totalExperience >= 95025896) return "125";
+        if (totalExperience >= 92012904) return "124";
+        if (totalExperience >= 89066630) return "123";
+        if (totalExperience >= 86186124) return "122";
+        if (totalExperience >= 83370445) return "121";
+
+        return level;
+    }
+
+    private static String setVirtualLevelForTheRest(final int totalExperience, final String level) {
+        logger.info("In method setVirtualLevelForTheRest...");
+        if (totalExperience >= 104273167) return "120";
+        if (totalExperience >= 94442737) return "119";
+        if (totalExperience >= 85539082) return "118";
+        if (totalExperience >= 77474828) return "117";
+        if (totalExperience >= 70170840) return "116";
+        if (totalExperience >= 63555443) return "115";
+        if (totalExperience >= 57563718) return "114";
+        if (totalExperience >= 52136869) return "113";
+        if (totalExperience >= 47221641) return "112";
+        if (totalExperience >= 42769801) return "111";
+        if (totalExperience >= 38737661) return "110";
+        if (totalExperience >= 35085654) return "109";
+        if (totalExperience >= 31777943) return "108";
+        if (totalExperience >= 28782069) return "107";
+        if (totalExperience >= 26068632) return "106";
+        if (totalExperience >= 23611006) return "105";
+        if (totalExperience >= 21385073) return "104";
+        if (totalExperience >= 19368992) return "103";
+        if (totalExperience >= 17542976) return "102";
+        if (totalExperience >= 15889109) return "101";
+        if (totalExperience >= 14391160) return "100";
 
         return level;
     }
