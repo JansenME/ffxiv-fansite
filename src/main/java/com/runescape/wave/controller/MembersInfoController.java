@@ -161,7 +161,7 @@ public class MembersInfoController {
         } catch (ArrayIndexOutOfBoundsException e) {
             return list;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return list;
     }
@@ -232,7 +232,7 @@ public class MembersInfoController {
         } catch (ArrayIndexOutOfBoundsException e) {
             return totalVirtualLevel;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return totalVirtualLevel;
