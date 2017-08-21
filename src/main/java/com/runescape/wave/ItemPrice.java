@@ -21,7 +21,7 @@ public class ItemPrice {
     private static final Logger logger = LoggerFactory.getLogger(ItemPrice.class);
 
     ItemPrice(){
-        logger.info("I'm not supposed to be in tis ItemPrice constructor.");
+        logger.info("I'm not supposed to be in this ItemPrice constructor.");
     }
 
     public static BigDecimal getItemPrice(URL link, Long itemId) {
