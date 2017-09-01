@@ -31,7 +31,7 @@
 
 					<spring:bind path="experience">
 						<div class="form-group ${status.error ? 'has-error' : ''}">
-							<form:input type="number" path="experience" class="form-control" placeholder="Experience each" required="required"></form:input>
+							<form:input type="number" step="any" path="experience" class="form-control" placeholder="Experience each" required="required"></form:input>
 							<form:errors path="experience"></form:errors>
 						</div>
 					</spring:bind>

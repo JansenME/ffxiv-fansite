@@ -26,7 +26,21 @@
 						<td style='padding:5px; text-align:left; width:20%;'><img src="http://services.runescape.com/m=avatar-rs/${memberName}/full.png" /></td>
 					</tr>
 				</table>
-				${tableInfo}
+
+				<c:if test="${showTableMember}">
+					<table style='width:100%;'>
+						<tr>
+							<td style='width:60%; padding:5px; text-align:justify; text-align-last:center; vertical-align: text-top;'>${tableInfo.biography}</td>
+							<td>
+								<table>
+									<tr><td style='padding:5px; text-align:right;'><strong>Gender: </strong></td><td style='padding:5px;'>${tableInfo.gender}</td></tr>
+									<tr><td style='padding:5px; text-align:right;'><strong>Date of Birth: </strong></td><td style='padding:5px;'>${tableInfo.dob}</td></tr>
+									<tr><td style='padding:5px; text-align:right;'><strong>City: </strong></td><td style='padding:5px;'>${tableInfo.cityStateCountry}</td></tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</c:if>
 
 				<table style="border:0px; margin:auto; width:100%; text-align:center;">
 					<tr>
@@ -49,7 +63,7 @@
 						<thead><tr><td> </td></tr></thead>
 						<tbody>
 							<c:forEach var="listValue" items="${listAdventurersLog}">
-								<tr><td>${listValue}</td></tr>
+								<tr><td><p style='font-weight:bold;'>${listValue.formattedDate} - ${listValue.title}</p>${listValue.description}</td></tr>
 							</c:forEach>
 						</tbody>
 					</table>
@@ -61,14 +75,43 @@
 						<thead><tr><th width="3%"></th><th>Skill</th><th>Level</th><th style='text-align:right;'>Experience</th><th style='text-align:right;'>Rank</th></tr></thead>
 						<tbody>
 							<c:forEach var="listValue" items="${listLevels}">
-								${listValue}
+								<c:choose>
+									<c:when test="${listValue.color == 'bold'}">
+										<tr style='font-weight:bold;'>
+									</c:when>
+									<c:when test="${listValue.color == 'red'}">
+										<tr style='color:red; font-weight:bold;'>
+									</c:when>
+									<c:when test="${listValue.color == 'limegreen'}">
+										<tr style='color:limegreen; font-weight:bold;'>
+									</c:when>
+									<c:otherwise>
+										<tr>
+									</c:otherwise>
+								</c:choose>
+
+								<td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/${listValue.name}.png' /></td>
+								<td>${listValue.nameUppercase}</td>
+
+								<c:choose>
+									<c:when test="${listValue.name == 'overall'}">
+										<td>${listValue.correctVirtualLevel} (${listValue.totalVirtualLevel})</td>
+									</c:when>
+									<c:otherwise>
+										<td>${listValue.correctVirtualLevel}</td>
+									</c:otherwise>
+								</c:choose>
+
+									<td align="right">${listValue.experienceFormatted}</td>
+									<td align="right">${listValue.rankFormatted}</td>
+								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<%@include file="footer.jsp" %>
+	<%@include file="footer.jsp" %>
 	</div>
 <script>
 	var clickAdventurersLog = document.getElementById('clickAdventurersLog');

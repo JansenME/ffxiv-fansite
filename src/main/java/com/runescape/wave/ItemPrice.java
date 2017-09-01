@@ -1,10 +1,15 @@
 package com.runescape.wave;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
@@ -12,49 +17,35 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-/**
- * Created by Martijn Jansen on 6/10/2017.
- */
 public class ItemPrice {
-    public static BigDecimal getItemPrice(Long itemID) throws Exception {
-        JSONParser parser = new JSONParser();
+    private static final Logger logger = LoggerFactory.getLogger(ItemPrice.class);
 
-        URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/graph/" + itemID + ".json");
-        URLConnection conn = link.openConnection();
+    ItemPrice(){
+        logger.info("I'm not supposed to be in this ItemPrice constructor.");
+    }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    public static BigDecimal getItemPrice(URL link, Long itemId) {
+        logger.info("I'm going to try and get the item price for item with id {}", itemId);
+        BufferedReader br;
+        URLConnection conn;
 
-        String inputLine;
-
-        String fileName = "src/main/resources/json/" + itemID + "-price.json";
-        File file = new File(fileName);
-
-        FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        Object obj;
-        JSONObject jsonObject;
-        Map<String, Object> flattenedJsonMap;
-        SortedSet<String> keys;
-        BigDecimal price;
-        try (BufferedWriter bw = new BufferedWriter(fw)) {
-
-            while ((inputLine = br.readLine()) != null) {
-                bw.write(inputLine);
-            }
-
-            bw.close();
+        try {
+            conn = link.openConnection();
+            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            logger.info("I succesfully got a stream for you.");
+        } catch (IOException ioe) {
+            logger.error("I failed getting a stream.");
+            return BigDecimal.valueOf(0);
         }
-        br.close();
 
-        obj = parser.parse(new FileReader("src/main/resources/json/" + itemID + "-price.json"));
+        JsonParser jp = new JsonParser();
+        JsonElement root = jp.parse(br);
 
-        jsonObject = (JSONObject) obj;
+        JsonObject jsonObject = (JsonObject) root;
 
-        flattenedJsonMap = JsonFlattener.flattenAsMap(jsonObject.toString());
-
-        keys = new TreeSet<>(flattenedJsonMap.keySet());
-
-        price = (BigDecimal) flattenedJsonMap.get(keys.last());
-
-        return price;
+        Map<String, Object> flattenedJsonMap = JsonFlattener.flattenAsMap(jsonObject.toString());
+        SortedSet<String> keys = new TreeSet<>(flattenedJsonMap.keySet());
+        logger.info("I succesfully got a price ({})", flattenedJsonMap.get(keys.last()));
+        return (BigDecimal) flattenedJsonMap.get(keys.last());
     }
 }

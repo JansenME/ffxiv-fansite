@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: wave
+Implementation-Version: 0.0.1-HENK
+Built-By: Martijn Jansen
+Implementation-Vendor-Id: com.runescape
+Created-By: IntelliJ IDEA
+Build-Jdk: 1.8.0_131
+Main-Class: ${start-class}
+

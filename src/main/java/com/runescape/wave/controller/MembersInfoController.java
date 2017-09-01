@@ -1,7 +1,16 @@
 package com.runescape.wave.controller;
 
+import com.runescape.wave.model.AdventurersLogInList;
 import com.runescape.wave.model.Member;
+import com.runescape.wave.model.SkillsInList;
 import com.runescape.wave.repository.MemberRepository;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,35 +19,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Martijn Jansen on 6/10/2017.
- */
 @Controller
 public class MembersInfoController {
-    private int totalVirtualLevel = 0;
+    private static final Logger logger = LoggerFactory.getLogger(MembersInfoController.class);
+
+    private static final String UNKNOWN = "unknown";
+    private static final String INVENTION = "invention";
+    private static final String DUNGEONEERING = "dungeoneering";
+    private static final String OVERALL = "overall";
 
     @Autowired
     private MemberRepository memberRepository;
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
-    public ModelAndView getMemberLevels(@PathVariable String name) {
-        List<String> memberLevelsList = getMemberLevelsList(name);
-        List<String> adventurersLogList = getAdventurersLogList(name);
+    public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException, IOException, FeedException {
+        logger.info("In method getMemberLevels...");
+        List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
+        List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
 
         ModelAndView model = new ModelAndView("member");
         model.addObject("listLevels", memberLevelsList);
@@ -48,142 +58,61 @@ public class MembersInfoController {
         Member member = memberRepository.findOneByName(name);
 
         if (member != null) {
+            model.addObject("showTableMember", true);
             model.addObject("tableInfo", getMemberTableInfo(member));
         }
 
         return model;
     }
 
-    private List<String> getAdventurersLogList(String name) {
-        List <String> list = new ArrayList<>();
-        try {
-            URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(rssUrl.openStream()));
+    private List<AdventurersLogInList> getAdventurersLogList(String name) throws IOException, FeedException {
+        logger.info("In method getAdventurersLogList...");
+        List <AdventurersLogInList> list = new ArrayList<>();
 
-            String line;
+        final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
+        final SyndFeedInput input = new SyndFeedInput();
+        final SyndFeed feed = input.build(new XmlReader(rssUrl));
 
-            while ((line = br.readLine()) != null) {
-                String adventurersLogTitle;
-                if (line.contains("<title>")) {
-                    int firstPos = line.indexOf("<title>");
-                    adventurersLogTitle = line.substring(firstPos);
-                    adventurersLogTitle = adventurersLogTitle.replace("<title>", "");
-                    int lastPos = adventurersLogTitle.indexOf("</title>");
-                    adventurersLogTitle = adventurersLogTitle.substring(0, lastPos);
-                    list.add(adventurersLogTitle);
-                }
+        for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
+            LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
 
-            }
-            list.remove(0);
-            list.remove(0);
-            br.close();
-
-            return list;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            list.add("Something went wrong. Probably this member of the clan is not a member on Runescape. Just so you know, this is not my fault. I'm still awesome...");
-            return list;
-        } catch (IOException e) {
-            e.printStackTrace();
-            list.add("Something went wrong");
-            return list;
+            String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            String title = entry.getTitle();
+            String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
+            list.add(new AdventurersLogInList(formattedDate, title, description));
         }
+        return list;
     }
 
-    private String getMemberTableInfo(Member member) {
+    private Member getMemberTableInfo(Member member) throws ParseException {
+        logger.info("In method getMemberTableInfo...");
         //Get correct lines for biography
         String biography;
 
-        if (member.getBiography() == null) {
-            biography = "This member did not give us an amazing text about themself!";
-        }
-        else {
-            biography = member.getBiography();
-        }
+        if (member.getBiography() == null) biography = "This member did not give us an amazing text about themself!";
+        else biography = member.getBiography();
 
         //Capitalize gender
         String gender;
 
-        if (member.getGender() == null) {
-            gender = "Unknown";
-        }
-        else {
-            gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
-        }
+        if (member.getGender() == null) gender = UNKNOWN;
+        else gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
 
         //Get the correct lines for the city
-        String cityStateCountry;
-
-        String city, state, country;
-        if (member.getCity() == null) {
-            city = "Unknown";
-        }
-        else {
-            city = member.getCity();
-        }
-
-        if (member.getState() == null) {
-            state = "Unknown";
-        }
-        else {
-            state = member.getState();
-        }
-
-        if (member.getCountry() == null) {
-            country = "Unknown";
-        }
-        else {
-            country = member.getCountry();
-        }
-
-        if (member.getCity() == null && member.getState() == null && member.getCountry() == null) {
-            cityStateCountry = "Unknown";
-        }
-        else {
-            cityStateCountry = city + ", " + state + ", " + country;
-        }
+        member.setCityStateCountry(member.getCity(), member.getState(), member.getCountry());
+        String cityStateCountry = member.getCityStateCountry();
 
         //Get the correct date format
-        String dob;
-        if (member.getDateOfBirth() == null) {
-            dob = "Unknown";
-        }
-        else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String date = "" + member.getDateOfBirth();
-            Date d = null;
-            try {
-                d = dateFormat.parse(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            dateFormat.applyPattern("MM/dd/yyy");
-
-            LocalDate now = LocalDate.now();
-
-            Period age = Period.between(member.getDateOfBirth().toLocalDate(), now);
-
-            dob = dateFormat.format(d) + " (" + age.getYears() + ")";
-        }
+        member.setDob(member.getDateOfBirth().toString());
+        String dob = member.getDob();
 
         //Make the correct string for the ModelAndView
-        return "<table style='width:100%;'>"
-                + "<tr>"
-                + "<td style='width:60%; padding:5px; text-align:justify; text-align-last:center; vertical-align: text-top;'>" + biography + "</td>"
-                + "<td>"
-                + "<table>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>Gender: </strong></td><td style='padding:5px;'>" + gender + "</td></tr>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>Date of Birth: </strong></td><td style='padding:5px;'>" + dob + "</td></tr>"
-                + "<tr><td style='padding:5px; text-align:right;'><strong>City: </strong></td><td style='padding:5px;'>" + cityStateCountry + "</td></tr>"
-                + "</table>"
-                + "</td>"
-                + "</tr>"
-                + "</table>";
+        return new Member(biography, gender, dob, cityStateCountry);
     }
 
-    private List<String> getMemberLevelsList(String name) {
-        List<String> list = new ArrayList<>();
+    private List<SkillsInList> getMemberLevelsList(String name) {
+        logger.info("In method getMemberLevelsList...");
+        List<SkillsInList> list = new ArrayList<>();
 
         try {
             URL link = new URL("http://services.runescape.com/m=hiscore/index_lite.ws?player=" + name);
@@ -191,180 +120,84 @@ public class MembersInfoController {
 
             String inputLine;
             String skill;
+
             int counter = 0;
+
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
-                switch (counter) {
-                    case 0: skill = "overall"; break;
-                    case 1: skill = "attack"; break;
-                    case 2: skill = "defence"; break;
-                    case 3: skill = "strength"; break;
-                    case 4: skill = "constitution"; break;
-                    case 5: skill = "ranged"; break;
-                    case 6: skill = "prayer"; break;
-                    case 7: skill = "magic"; break;
-                    case 8: skill = "cooking"; break;
-                    case 9: skill = "woodcutting"; break;
-                    case 10: skill = "fletching"; break;
-                    case 11: skill = "fishing"; break;
-                    case 12: skill = "firemaking"; break;
-                    case 13: skill = "crafting"; break;
-                    case 14: skill = "smithing"; break;
-                    case 15: skill = "mining"; break;
-                    case 16: skill = "herblore"; break;
-                    case 17: skill = "agility"; break;
-                    case 18: skill = "thieving"; break;
-                    case 19: skill = "slayer"; break;
-                    case 20: skill = "farming"; break;
-                    case 21: skill = "runecrafting"; break;
-                    case 22: skill = "hunter"; break;
-                    case 23: skill = "construction"; break;
-                    case 24: skill = "summoning"; break;
-                    case 25: skill = "dungeoneering"; break;
-                    case 26: skill = "divination"; break;
-                    case 27: skill = "invention"; break;
-                    default: skill = "unknown"; break;
-                }
 
-                String skillUpperCase = skill.substring(0, 1).toUpperCase() + skill.substring(1);
+                String rank = array[0];
+                String level = array[1];
+                String experience = array[2];
+
+                skill = getCorrectSkillName(counter);
 
                 Locale locale = new Locale("en", "EN");
                 NumberFormat numberFormat = NumberFormat.getInstance(locale);
 
-                int array2Int = Integer.parseInt(array[2]);
-                String array2Formatted = numberFormat.format(array2Int);
+                int experienceAsInt = Integer.parseInt(experience);
+                String experienceFormatted = numberFormat.format(experienceAsInt);
 
-                int array0Int = Integer.parseInt(array[0]);
-                String array0Formatted = numberFormat.format(array0Int);
+                int rankAsInt = Integer.parseInt(rank);
+                String rankFormatted = numberFormat.format(rankAsInt);
 
-                int array1Int = Integer.parseInt(array[1]);
+                int levelAsInt = Integer.parseInt(level);
 
-                if (array1Int == 0) {
-                    array[1] = "1";
-                }
+                if (levelAsInt == 0) level = "1";
+                if (experienceAsInt == -1) experienceFormatted = "0";
+                if (rankAsInt == -1) rankFormatted = "None";
 
-                if (array2Int == -1) {
-                    array2Formatted = "0";
-                }
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, level);
+                int correctVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
 
-                if (array0Int == -1) {
-                    array0Formatted = "None";
-                }
+                String color = getTheCorrectColor(skill, experienceAsInt, correctVirtualLevelAsInt);
 
-                //Set virtual levels
-                if (array2Int >= 14391160 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "100";
-                if (array2Int >= 15889109 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "101";
-                if (array2Int >= 17542976 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "102";
-                if (array2Int >= 19368992 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "103";
-                if (array2Int >= 21385073 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "104";
-                if (array2Int >= 23611006 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "105";
-                if (array2Int >= 26068632 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "106";
-                if (array2Int >= 28782069 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "107";
-                if (array2Int >= 31777943 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "108";
-                if (array2Int >= 35085654 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "109";
-                if (array2Int >= 38737661 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "110";
-                if (array2Int >= 42769801 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "111";
-                if (array2Int >= 47221641 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "112";
-                if (array2Int >= 52136869 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "113";
-                if (array2Int >= 57563718 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "114";
-                if (array2Int >= 63555443 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "115";
-                if (array2Int >= 70170840 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "116";
-                if (array2Int >= 77474828 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "117";
-                if (array2Int >= 85539082 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "118";
-                if (array2Int >= 94442737 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "119";
-                if (array2Int >= 104273167 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "120";
+                String totalVirtualLevel = null;
+                if (OVERALL.equals(skill)) totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
 
-                //Set virtual levels for Elite skills
-                if (array2Int >= 83370445 && skill.equals("invention")) array[1] = "121";
-                if (array2Int >= 86186124 && skill.equals("invention")) array[1] = "122";
-                if (array2Int >= 89066630 && skill.equals("invention")) array[1] = "123";
-                if (array2Int >= 92012904 && skill.equals("invention")) array[1] = "124";
-                if (array2Int >= 95025896 && skill.equals("invention")) array[1] = "125";
-                if (array2Int >= 98106559 && skill.equals("invention")) array[1] = "126";
-                if (array2Int >= 101255855 && skill.equals("invention")) array[1] = "127";
-                if (array2Int >= 104474750 && skill.equals("invention")) array[1] = "128";
-                if (array2Int >= 107764216 && skill.equals("invention")) array[1] = "129";
-                if (array2Int >= 111125230 && skill.equals("invention")) array[1] = "130";
-                if (array2Int >= 114558777 && skill.equals("invention")) array[1] = "131";
-                if (array2Int >= 118065845 && skill.equals("invention")) array[1] = "132";
-                if (array2Int >= 121647430 && skill.equals("invention")) array[1] = "133";
-                if (array2Int >= 125304532 && skill.equals("invention")) array[1] = "134";
-                if (array2Int >= 129038159 && skill.equals("invention")) array[1] = "135";
-                if (array2Int >= 132849323 && skill.equals("invention")) array[1] = "136";
-                if (array2Int >= 136739041 && skill.equals("invention")) array[1] = "137";
-                if (array2Int >= 140708338 && skill.equals("invention")) array[1] = "138";
-                if (array2Int >= 144758242 && skill.equals("invention")) array[1] = "139";
-                if (array2Int >= 148889790 && skill.equals("invention")) array[1] = "140";
-                if (array2Int >= 153104021 && skill.equals("invention")) array[1] = "141";
-                if (array2Int >= 157401983 && skill.equals("invention")) array[1] = "142";
-                if (array2Int >= 161784728 && skill.equals("invention")) array[1] = "143";
-                if (array2Int >= 166253312 && skill.equals("invention")) array[1] = "144";
-                if (array2Int >= 170808801 && skill.equals("invention")) array[1] = "145";
-                if (array2Int >= 175452262 && skill.equals("invention")) array[1] = "146";
-                if (array2Int >= 180184770 && skill.equals("invention")) array[1] = "147";
-                if (array2Int >= 185007406 && skill.equals("invention")) array[1] = "148";
-                if (array2Int >= 189921255 && skill.equals("invention")) array[1] = "149";
-                if (array2Int >= 194927409 && skill.equals("invention")) array[1] = "150";
-                if (array2Int >= 200000000 && skill.equals("invention")) array[1] = array2Formatted;
-
-                int levelAsInt = Integer.parseInt(array[1]);
-
-                if (skill.equals("overall")) {
-                    list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + " (" + getTotalVirtualLevel(name) + ")</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                }
-                else {
-                    if (skill.equals("dungeoneering")) {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else if (levelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                    }
-                    else if (skill.equals("invention")) {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else if (levelAsInt == 150) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else if (levelAsInt >= 120) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                    }
-                    else {
-                        if (array2Int == 200000000) {
-                            list.add("<tr style='color:red; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else if (levelAsInt == 120) {
-                            list.add("<tr style='color:limegreen; font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else if (levelAsInt >= 99) {
-                            list.add("<tr style='font-weight:bold;'><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                        else {
-                            list.add("<tr><td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/" + skill + ".png' /></td><td>" + skillUpperCase + "</td><td>" + array[1] + "</td><td align='right'>" + array2Formatted + "</td><td align='right'>" + array0Formatted + "</td></tr>");
-                        }
-                    }
-                }
+                list.add(new SkillsInList(skill, correctVirtualLevel, experienceFormatted, rankFormatted, totalVirtualLevel, color));
                 counter++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            return list;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        totalVirtualLevel = 0;
         return list;
     }
 
+    private String getTheCorrectColor(String skill, int experienceAsInt, int correctVirtualLevelAsInt) {
+        logger.info("In method getTheCorrectColor...");
+        final String colorRed = "red";
+        final String colorLimegreen = "limegreen";
+        final String colorBold = "bold";
+        final String colorNormal = "normal";
+
+        switch (skill) {
+            case OVERALL:
+                return colorNormal;
+
+            case DUNGEONEERING:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+                else return colorNormal;
+
+            case INVENTION:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 150) return colorLimegreen;
+                else if (correctVirtualLevelAsInt >= 120) return colorBold;
+                else return colorNormal;
+
+            default:
+                if (experienceAsInt == 200000000) return colorRed;
+                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+                else if (correctVirtualLevelAsInt >= 99) return colorBold;
+                else return colorNormal;
+        }
+    }
+
     private int getTotalVirtualLevel(String nameMember) {
+        logger.info("In method getTotalVirtualLevel...");
         int totalLevel = 0;
         int totalVirtualLevel = 0;
         try {
@@ -376,123 +209,140 @@ public class MembersInfoController {
             int counter = 0;
             while ((inputLine = br.readLine()) != null) {
                 String[] array = inputLine.split(",");
-                switch (counter) {
-                    case 0: skill = "overall"; break;
-                    case 1: skill = "attack"; break;
-                    case 2: skill = "defence"; break;
-                    case 3: skill = "strength"; break;
-                    case 4: skill = "constitution"; break;
-                    case 5: skill = "ranged"; break;
-                    case 6: skill = "prayer"; break;
-                    case 7: skill = "magic"; break;
-                    case 8: skill = "cooking"; break;
-                    case 9: skill = "woodcutting"; break;
-                    case 10: skill = "fletching"; break;
-                    case 11: skill = "fishing"; break;
-                    case 12: skill = "firemaking"; break;
-                    case 13: skill = "crafting"; break;
-                    case 14: skill = "smithing"; break;
-                    case 15: skill = "mining"; break;
-                    case 16: skill = "herblore"; break;
-                    case 17: skill = "agility"; break;
-                    case 18: skill = "thieving"; break;
-                    case 19: skill = "slayer"; break;
-                    case 20: skill = "farming"; break;
-                    case 21: skill = "runecrafting"; break;
-                    case 22: skill = "hunter"; break;
-                    case 23: skill = "construction"; break;
-                    case 24: skill = "summoning"; break;
-                    case 25: skill = "dungeoneering"; break;
-                    case 26: skill = "divination"; break;
-                    case 27: skill = "invention"; break;
-                    default: skill = "unknown"; break;
-                }
 
-                Locale locale = new Locale("en", "EN");
-                NumberFormat numberFormat = NumberFormat.getInstance(locale);
+                skill = getCorrectSkillName(counter);
 
-                int array2Int = Integer.parseInt(array[2]);
-                String array2Formatted = numberFormat.format(array2Int);
+                int experienceLevel = Integer.parseInt(array[2]);
 
-                int array1Int = Integer.parseInt(array[1]);
+                int level = Integer.parseInt(array[1]);
 
-                if (array1Int == 0) {
+                if (level == 0) {
                     array[1] = "1";
                 }
 
-                if (array2Int == -1) {
-                    array2Formatted = "0";
-                }
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceLevel, skill, array[1]);
 
-                //Set virtual levels
-                if (array2Int >= 14391160 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "100";
-                if (array2Int >= 15889109 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "101";
-                if (array2Int >= 17542976 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "102";
-                if (array2Int >= 19368992 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "103";
-                if (array2Int >= 21385073 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "104";
-                if (array2Int >= 23611006 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "105";
-                if (array2Int >= 26068632 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "106";
-                if (array2Int >= 28782069 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "107";
-                if (array2Int >= 31777943 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "108";
-                if (array2Int >= 35085654 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "109";
-                if (array2Int >= 38737661 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "110";
-                if (array2Int >= 42769801 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "111";
-                if (array2Int >= 47221641 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "112";
-                if (array2Int >= 52136869 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "113";
-                if (array2Int >= 57563718 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "114";
-                if (array2Int >= 63555443 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "115";
-                if (array2Int >= 70170840 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "116";
-                if (array2Int >= 77474828 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "117";
-                if (array2Int >= 85539082 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "118";
-                if (array2Int >= 94442737 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "119";
-                if (array2Int >= 104273167 && !skill.equals("overall") && !skill.equals("invention")) array[1] = "120";
+                totalLevel = Integer.parseInt(correctVirtualLevel);
 
-                //Set virtual levels for Elite skills
-                if (array2Int >= 83370445 && skill.equals("invention")) array[1] = "121";
-                if (array2Int >= 86186124 && skill.equals("invention")) array[1] = "122";
-                if (array2Int >= 89066630 && skill.equals("invention")) array[1] = "123";
-                if (array2Int >= 92012904 && skill.equals("invention")) array[1] = "124";
-                if (array2Int >= 95025896 && skill.equals("invention")) array[1] = "125";
-                if (array2Int >= 98106559 && skill.equals("invention")) array[1] = "126";
-                if (array2Int >= 101255855 && skill.equals("invention")) array[1] = "127";
-                if (array2Int >= 104474750 && skill.equals("invention")) array[1] = "128";
-                if (array2Int >= 107764216 && skill.equals("invention")) array[1] = "129";
-                if (array2Int >= 111125230 && skill.equals("invention")) array[1] = "130";
-                if (array2Int >= 114558777 && skill.equals("invention")) array[1] = "131";
-                if (array2Int >= 118065845 && skill.equals("invention")) array[1] = "132";
-                if (array2Int >= 121647430 && skill.equals("invention")) array[1] = "133";
-                if (array2Int >= 125304532 && skill.equals("invention")) array[1] = "134";
-                if (array2Int >= 129038159 && skill.equals("invention")) array[1] = "135";
-                if (array2Int >= 132849323 && skill.equals("invention")) array[1] = "136";
-                if (array2Int >= 136739041 && skill.equals("invention")) array[1] = "137";
-                if (array2Int >= 140708338 && skill.equals("invention")) array[1] = "138";
-                if (array2Int >= 144758242 && skill.equals("invention")) array[1] = "139";
-                if (array2Int >= 148889790 && skill.equals("invention")) array[1] = "140";
-                if (array2Int >= 153104021 && skill.equals("invention")) array[1] = "141";
-                if (array2Int >= 157401983 && skill.equals("invention")) array[1] = "142";
-                if (array2Int >= 161784728 && skill.equals("invention")) array[1] = "143";
-                if (array2Int >= 166253312 && skill.equals("invention")) array[1] = "144";
-                if (array2Int >= 170808801 && skill.equals("invention")) array[1] = "145";
-                if (array2Int >= 175452262 && skill.equals("invention")) array[1] = "146";
-                if (array2Int >= 180184770 && skill.equals("invention")) array[1] = "147";
-                if (array2Int >= 185007406 && skill.equals("invention")) array[1] = "148";
-                if (array2Int >= 189921255 && skill.equals("invention")) array[1] = "149";
-                if (array2Int >= 194927409 && skill.equals("invention")) array[1] = "150";
-                if (array2Int >= 200000000 && skill.equals("invention")) array[1] = array2Formatted;
-
-                totalLevel = Integer.parseInt(array[1]);
-
-                if (!skill.equals("overall")) {
+                if (!skill.equals(OVERALL)) {
                     totalVirtualLevel += totalLevel;
                 }
                 counter++;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            return totalVirtualLevel;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         return totalVirtualLevel;
+    }
+
+    private static String getCorrectSkillName(int counter) {
+        logger.info("In method getCorrectSkillName...");
+        switch (counter) {
+            case 0: return OVERALL;
+            case 1: return "attack";
+            case 2: return "defence";
+            case 3: return "strength";
+            case 4: return "constitution";
+            case 5: return "ranged";
+            case 6: return "prayer";
+            case 7: return "magic";
+            case 8: return "cooking";
+            case 9: return "woodcutting";
+            case 10: return "fletching";
+            case 11: return "fishing";
+            case 12: return "firemaking";
+            case 13: return "crafting";
+            case 14: return "smithing";
+            case 15: return "mining";
+            case 16: return "herblore";
+            case 17: return "agility";
+            case 18: return "thieving";
+            case 19: return "slayer";
+            case 20: return "farming";
+            case 21: return "runecrafting";
+            case 22: return "hunter";
+            case 23: return "construction";
+            case 24: return "summoning";
+            case 25: return DUNGEONEERING;
+            case 26: return "divination";
+            case 27: return INVENTION;
+            default: return UNKNOWN;
+        }
+    }
+
+    private static String setCorrectVirtualLevel(final int totalExperience, final String skill, final String level) {
+        logger.info("In method setCorrectVirtualLevel...");
+        String levelToReturn = level;
+
+        if (INVENTION.equals(skill) && totalExperience >= 83370445) levelToReturn = setVirtualLevelForInvention(totalExperience, level);
+        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && totalExperience >= 14391160) levelToReturn = setVirtualLevelForTheRest(totalExperience, level);
+
+        return levelToReturn;
+    }
+
+    private static String setVirtualLevelForInvention(final int totalExperience, final String level) {
+        logger.info("In method setVirtualLevelForInvention...");
+        if (totalExperience >= 194927409) return "150";
+        if (totalExperience >= 189921255) return "149";
+        if (totalExperience >= 185007406) return "148";
+        if (totalExperience >= 180184770) return "147";
+        if (totalExperience >= 175452262) return "146";
+        if (totalExperience >= 170808801) return "145";
+        if (totalExperience >= 166253312) return "144";
+        if (totalExperience >= 161784728) return "143";
+        if (totalExperience >= 157401983) return "142";
+        if (totalExperience >= 153104021) return "141";
+        if (totalExperience >= 148889790) return "140";
+        if (totalExperience >= 144758242) return "139";
+        if (totalExperience >= 140708338) return "138";
+        if (totalExperience >= 136739041) return "137";
+        if (totalExperience >= 132849323) return "136";
+        if (totalExperience >= 129038159) return "135";
+        if (totalExperience >= 125304532) return "134";
+        if (totalExperience >= 121647430) return "133";
+        if (totalExperience >= 118065845) return "132";
+        if (totalExperience >= 114558777) return "131";
+        if (totalExperience >= 111125230) return "130";
+        if (totalExperience >= 107764216) return "129";
+        if (totalExperience >= 104474750) return "128";
+        if (totalExperience >= 101255855) return "127";
+        if (totalExperience >= 98106559) return "126";
+        if (totalExperience >= 95025896) return "125";
+        if (totalExperience >= 92012904) return "124";
+        if (totalExperience >= 89066630) return "123";
+        if (totalExperience >= 86186124) return "122";
+        if (totalExperience >= 83370445) return "121";
+
+        return level;
+    }
+
+    private static String setVirtualLevelForTheRest(final int totalExperience, final String level) {
+        logger.info("In method setVirtualLevelForTheRest...");
+        if (totalExperience >= 104273167) return "120";
+        if (totalExperience >= 94442737) return "119";
+        if (totalExperience >= 85539082) return "118";
+        if (totalExperience >= 77474828) return "117";
+        if (totalExperience >= 70170840) return "116";
+        if (totalExperience >= 63555443) return "115";
+        if (totalExperience >= 57563718) return "114";
+        if (totalExperience >= 52136869) return "113";
+        if (totalExperience >= 47221641) return "112";
+        if (totalExperience >= 42769801) return "111";
+        if (totalExperience >= 38737661) return "110";
+        if (totalExperience >= 35085654) return "109";
+        if (totalExperience >= 31777943) return "108";
+        if (totalExperience >= 28782069) return "107";
+        if (totalExperience >= 26068632) return "106";
+        if (totalExperience >= 23611006) return "105";
+        if (totalExperience >= 21385073) return "104";
+        if (totalExperience >= 19368992) return "103";
+        if (totalExperience >= 17542976) return "102";
+        if (totalExperience >= 15889109) return "101";
+        if (totalExperience >= 14391160) return "100";
+
+        return level;
     }
 }
