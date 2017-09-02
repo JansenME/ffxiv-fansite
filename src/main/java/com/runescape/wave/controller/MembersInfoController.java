@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@SuppressWarnings("unchecked")
 @Controller
 public class MembersInfoController {
     private static final Logger logger = LoggerFactory.getLogger(MembersInfoController.class);
@@ -73,7 +74,17 @@ public class MembersInfoController {
         final SyndFeedInput input = new SyndFeedInput();
         final SyndFeed feed = input.build(new XmlReader(rssUrl));
 
-        for (SyndEntry entry : (List<SyndEntry>) feed.getEntries()) {
+        List<SyndEntry> listSyndEntries = new ArrayList<>();
+
+        try {
+            listSyndEntries = (List<SyndEntry>) feed.getEntries();
+        } catch (ClassCastException c) {
+            logger.error("Feedentries cannot be cast to a List.");
+        } catch (Exception e) {
+            logger.error("Something went wrong, but I don't know what it was.");
+        }
+
+        for (SyndEntry entry : listSyndEntries) {
             LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
 
             String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));

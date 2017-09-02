@@ -90,7 +90,7 @@
 									</c:otherwise>
 								</c:choose>
 
-								<td><img style='width:20px;' src='http://www.insiteweb.nl/wave-runescape/images/${listValue.name}.png' /></td>
+								<td><img style='width:20px;' src='/resources/images/${listValue.name}.png' /></td>
 								<td>${listValue.nameUppercase}</td>
 
 								<c:choose>
