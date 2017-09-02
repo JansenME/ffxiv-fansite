@@ -68,7 +68,7 @@ public class MembersInfoController {
 
     private List<AdventurersLogInList> getAdventurersLogList(String name) throws IOException, FeedException {
         logger.info("In method getAdventurersLogList...");
-        List <AdventurersLogInList> list = new ArrayList<>();
+        List<AdventurersLogInList> list = new ArrayList<>();
 
         final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
         final SyndFeedInput input = new SyndFeedInput();
@@ -252,35 +252,64 @@ public class MembersInfoController {
     private static String getCorrectSkillName(int counter) {
         logger.info("In method getCorrectSkillName...");
         switch (counter) {
-            case 0: return OVERALL;
-            case 1: return "attack";
-            case 2: return "defence";
-            case 3: return "strength";
-            case 4: return "constitution";
-            case 5: return "ranged";
-            case 6: return "prayer";
-            case 7: return "magic";
-            case 8: return "cooking";
-            case 9: return "woodcutting";
-            case 10: return "fletching";
-            case 11: return "fishing";
-            case 12: return "firemaking";
-            case 13: return "crafting";
-            case 14: return "smithing";
-            case 15: return "mining";
-            case 16: return "herblore";
-            case 17: return "agility";
-            case 18: return "thieving";
-            case 19: return "slayer";
-            case 20: return "farming";
-            case 21: return "runecrafting";
-            case 22: return "hunter";
-            case 23: return "construction";
-            case 24: return "summoning";
-            case 25: return DUNGEONEERING;
-            case 26: return "divination";
-            case 27: return INVENTION;
-            default: return UNKNOWN;
+            case 0:
+                return OVERALL;
+            case 1:
+                return "attack";
+            case 2:
+                return "defence";
+            case 3:
+                return "strength";
+            case 4:
+                return "constitution";
+            case 5:
+                return "ranged";
+            case 6:
+                return "prayer";
+            case 7:
+                return "magic";
+            case 8:
+                return "cooking";
+            case 9:
+                return "woodcutting";
+            case 10:
+                return "fletching";
+            case 11:
+                return "fishing";
+            case 12:
+                return "firemaking";
+            case 13:
+                return "crafting";
+            case 14:
+                return "smithing";
+            case 15:
+                return "mining";
+            case 16:
+                return "herblore";
+            case 17:
+                return "agility";
+            case 18:
+                return "thieving";
+            case 19:
+                return "slayer";
+            case 20:
+                return "farming";
+            case 21:
+                return "runecrafting";
+            case 22:
+                return "hunter";
+            case 23:
+                return "construction";
+            case 24:
+                return "summoning";
+            case 25:
+                return DUNGEONEERING;
+            case 26:
+                return "divination";
+            case 27:
+                return INVENTION;
+            default:
+                return UNKNOWN;
         }
     }
 
@@ -288,8 +317,10 @@ public class MembersInfoController {
         logger.info("In method setCorrectVirtualLevel...");
         String levelToReturn = level;
 
-        if (INVENTION.equals(skill) && totalExperience >= 83370445) levelToReturn = setVirtualLevelForInvention(totalExperience, level);
-        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && totalExperience >= 14391160) levelToReturn = setVirtualLevelForTheRest(totalExperience, level);
+        if (INVENTION.equals(skill) && totalExperience >= 83370445)
+            levelToReturn = setVirtualLevelForInvention(totalExperience, level);
+        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && totalExperience >= 14391160)
+            levelToReturn = setVirtualLevelForTheRest(totalExperience, level);
 
         return levelToReturn;
     }

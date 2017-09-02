@@ -52,31 +52,31 @@ public class MembersListController {
     private List<MembersInList> setMembersList() throws IOException {
         List<MembersInList> list = new ArrayList<>();
 
-            URL link = new URL("http://services.runescape.com/m=clan-hiscores/members_lite.ws?clanName=Wave");
-            BufferedReader br = new BufferedReader(new InputStreamReader(link.openStream()));
+        URL link = new URL("http://services.runescape.com/m=clan-hiscores/members_lite.ws?clanName=Wave");
+        BufferedReader br = new BufferedReader(new InputStreamReader(link.openStream()));
 
-            String inputLine;
+        String inputLine;
 
-            int counter = 0;
+        int counter = 0;
 
-            while ((inputLine = br.readLine()) != null) {
-                if (counter != 0) {
-                    String[] array = inputLine.split(",");
-                    String name = array[0].replaceAll("�", " ");
-                    String rank = array[1];
-                    String experience = array[2];
-                    String kills = array[3];
+        while ((inputLine = br.readLine()) != null) {
+            if (counter != 0) {
+                String[] array = inputLine.split(",");
+                String name = array[0].replaceAll("�", " ");
+                String rank = array[1];
+                String experience = array[2];
+                String kills = array[3];
 
-                    int experienceAsInt = Integer.parseInt(experience);
-                    int killsAsInt = Integer.parseInt(kills);
+                int experienceAsInt = Integer.parseInt(experience);
+                int killsAsInt = Integer.parseInt(kills);
 
-                    this.totalExperienceClan += experienceAsInt;
+                this.totalExperienceClan += experienceAsInt;
 
-                    list.add(new MembersInList(name, rank, experienceAsInt, killsAsInt));
+                list.add(new MembersInList(name, rank, experienceAsInt, killsAsInt));
 
-                }
-                counter++;
             }
+            counter++;
+        }
 
         return list;
     }

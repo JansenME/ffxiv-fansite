@@ -77,7 +77,7 @@ public class ItemService {
         String experience = item.getExperience().toString();
 
         if (experience.contains(".0")) {
-            experience = experience.substring(0 , experience.length() - 2);
+            experience = experience.substring(0, experience.length() - 2);
         }
 
         model.addObject("itemIconSmall", itemIconSmall);
