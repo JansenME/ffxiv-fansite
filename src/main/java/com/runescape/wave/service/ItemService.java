@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.runescape.wave.ItemPrice;
 import com.runescape.wave.model.Items;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.BufferedReader;
@@ -14,14 +16,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by Martijn Jansen on 9/1/2017.
- */
 public class ItemService {
+    private ItemService() {
+
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private static final String POSITIVE = "positive";
 
     private static String itemIconSmall;
@@ -40,12 +42,8 @@ public class ItemService {
     private static String itemDay180Change;
 
     public static ModelAndView itemListService(List<Items> itemList) {
-        Collections.sort(itemList, new Comparator<Items>() {
-            @Override
-            public int compare(final Items item1, final Items item2) {
-                return item1.getNameItem().compareToIgnoreCase(item2.getNameItem());
-            }
-        });
+        logger.info("Sorting list and setting ModelAndView");
+        itemList.sort((item1, item2) -> item1.getNameItem().compareToIgnoreCase(item2.getNameItem()));
 
         ModelAndView model = new ModelAndView("items");
         model.addObject("itemList", itemList);
