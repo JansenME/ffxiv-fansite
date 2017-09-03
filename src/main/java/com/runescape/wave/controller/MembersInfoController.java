@@ -46,7 +46,7 @@ public class MembersInfoController {
     private MemberRepository memberRepository;
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
-    public ModelAndView getMemberLevels(@PathVariable String name) throws ParseException, IOException, FeedException {
+    public ModelAndView getMemberLevels(@PathVariable String name) throws Exception {
         logger.info("In method getMemberLevels...");
         List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
         List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
@@ -80,8 +80,7 @@ public class MembersInfoController {
             listSyndEntries = (List<SyndEntry>) feed.getEntries();
         } catch (ClassCastException c) {
             logger.error("Feedentries cannot be cast to a List.");
-        } catch (Exception e) {
-            logger.error("Something went wrong, but I don't know what it was.");
+            throw new ClassCastException();
         }
 
         for (SyndEntry entry : listSyndEntries) {

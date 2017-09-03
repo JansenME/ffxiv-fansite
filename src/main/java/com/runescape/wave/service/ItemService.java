@@ -43,6 +43,7 @@ public class ItemService {
 
     public static ModelAndView itemListService(List<Items> itemList) {
         logger.info("Sorting list and setting ModelAndView");
+
         itemList.sort((item1, item2) -> item1.getNameItem().compareToIgnoreCase(item2.getNameItem()));
 
         ModelAndView model = new ModelAndView("items");
