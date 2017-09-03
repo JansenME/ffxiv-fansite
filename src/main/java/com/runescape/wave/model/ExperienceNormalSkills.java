@@ -18,6 +18,7 @@ public class ExperienceNormalSkills {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -25,6 +26,7 @@ public class ExperienceNormalSkills {
     public Long getTotalExperience() {
         return totalExperience;
     }
+
     public void setTotalExperience(Long totalExperience) {
         this.totalExperience = totalExperience;
     }
