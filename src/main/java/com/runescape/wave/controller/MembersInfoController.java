@@ -46,7 +46,7 @@ public class MembersInfoController {
     private MemberRepository memberRepository;
 
     @RequestMapping(value = "/member/{name}", method = RequestMethod.GET)
-    public ModelAndView getMemberLevels(@PathVariable String name) throws Exception {
+    public ModelAndView getMemberLevels(@PathVariable String name) throws IOException, FeedException, ParseException {
         logger.info("In method getMemberLevels...");
         List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
         List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);
@@ -70,26 +70,32 @@ public class MembersInfoController {
         logger.info("In method getAdventurersLogList...");
         List<AdventurersLogInList> list = new ArrayList<>();
 
-        final URL rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
-        final SyndFeedInput input = new SyndFeedInput();
-        final SyndFeed feed = input.build(new XmlReader(rssUrl));
-
-        List<SyndEntry> listSyndEntries = new ArrayList<>();
-
+        URL rssUrl;
         try {
-            listSyndEntries = (List<SyndEntry>) feed.getEntries();
-        } catch (ClassCastException c) {
-            logger.error("Feedentries cannot be cast to a List.");
-            throw new ClassCastException();
-        }
+            rssUrl = new URL("http://services.runescape.com/l=0/m=adventurers-log/rssfeed?searchName=" + name);
+            final SyndFeedInput input = new SyndFeedInput();
+            final SyndFeed feed = input.build(new XmlReader(rssUrl));
 
-        for (SyndEntry entry : listSyndEntries) {
-            LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
+            List<SyndEntry> listSyndEntries;
 
-            String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-            String title = entry.getTitle();
-            String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
-            list.add(new AdventurersLogInList(formattedDate, title, description));
+            try {
+                listSyndEntries = (List<SyndEntry>) feed.getEntries();
+            } catch (ClassCastException c) {
+                logger.error("Feedentries cannot be cast to a List.");
+                throw new ClassCastException();
+            }
+
+            for (SyndEntry entry : listSyndEntries) {
+                LocalDate dateAsLocalDate = LocalDateTime.ofInstant(entry.getPublishedDate().toInstant(), ZoneOffset.UTC).toLocalDate();
+
+                String formattedDate = dateAsLocalDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                String title = entry.getTitle();
+                String description = entry.getDescription().getValue().trim().replaceAll("\\s+", " ").replaceAll("\\s,", ",");
+                list.add(new AdventurersLogInList(formattedDate, title, description));
+            }
+        } catch (IOException i) {
+            list.add(new AdventurersLogInList(null, name + " has set his/her adventurers log to private",""));
+            return list;
         }
         return list;
     }
@@ -172,6 +178,8 @@ public class MembersInfoController {
             return list;
         } catch (IOException e) {
             logger.error(e.getMessage());
+            list.add(new SkillsInList("", "","", "", "", ""));
+            return list;
         }
         return list;
     }

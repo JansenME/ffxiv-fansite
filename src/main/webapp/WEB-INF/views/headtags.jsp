@@ -2,7 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="description" content="Clanwebsite for Wave from Runescape">
+<meta name="description" content="Clanwebsite for Laputa Island from Runescape">
 <meta name="author" content="Martijn Jansen">
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>"/>

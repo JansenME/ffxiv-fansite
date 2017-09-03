@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <%@include file="headtags.jsp" %>
-    <title>Wave - Members</title>
+    <title>Laputa Island - Members</title>
 </head>
 <body>
 <div id="page">

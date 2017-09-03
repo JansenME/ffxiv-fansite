@@ -52,7 +52,7 @@ public class MembersListController {
     private List<MembersInList> setMembersList() throws IOException {
         List<MembersInList> list = new ArrayList<>();
 
-        URL link = new URL("http://services.runescape.com/m=clan-hiscores/members_lite.ws?clanName=Wave");
+        URL link = new URL("http://services.runescape.com/m=clan-hiscores/members_lite.ws?clanName=Laputa Island");
         BufferedReader br = new BufferedReader(new InputStreamReader(link.openStream()));
 
         String inputLine;
