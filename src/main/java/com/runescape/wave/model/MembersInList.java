@@ -9,7 +9,7 @@ public class MembersInList {
     private int experience;
     private int kills;
 
-    public MembersInList(String name, String rank, int experience, int kills){
+    public MembersInList(String name, String rank, int experience, int kills) {
         this.name = name;
         this.rank = rank;
         this.experience = experience;

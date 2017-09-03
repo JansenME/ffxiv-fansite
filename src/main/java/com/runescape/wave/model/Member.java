@@ -36,7 +36,7 @@ public class Member {
 
     }
 
-    public Member (String biography, String gender, String dob, String cityStateCountry) {
+    public Member(String biography, String gender, String dob, String cityStateCountry) {
         this.biography = biography;
         this.gender = gender;
         this.dob = dob;

@@ -20,7 +20,7 @@ import java.util.TreeSet;
 public class ItemPrice {
     private static final Logger logger = LoggerFactory.getLogger(ItemPrice.class);
 
-    ItemPrice(){
+    ItemPrice() {
         logger.info("I'm not supposed to be in this ItemPrice constructor.");
     }
 
