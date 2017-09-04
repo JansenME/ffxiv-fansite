@@ -1,6 +1,6 @@
-package com.runescape.wave.repository;
+package com.runescape.clan.repository;
 
-import com.runescape.wave.model.Items;
+import com.runescape.clan.model.Items;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -1,9 +1,9 @@
-package com.runescape.wave.controller;
+package com.runescape.clan.controller;
 
-import com.runescape.wave.model.AdventurersLogInList;
-import com.runescape.wave.model.Member;
-import com.runescape.wave.model.SkillsInList;
-import com.runescape.wave.repository.MemberRepository;
+import com.runescape.clan.model.AdventurersLogInList;
+import com.runescape.clan.model.Member;
+import com.runescape.clan.model.SkillsInList;
+import com.runescape.clan.repository.MemberRepository;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;

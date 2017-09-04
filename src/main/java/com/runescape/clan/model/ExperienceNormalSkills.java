@@ -1,4 +1,4 @@
-package com.runescape.wave.model;
+package com.runescape.clan.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * Created by Martijn Jansen on 6/10/2017.
  */
 @Entity
-public class ExperienceEliteSkills {
+public class ExperienceNormalSkills {
     private Long id;
     private Long totalExperience;
 

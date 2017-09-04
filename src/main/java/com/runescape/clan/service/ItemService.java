@@ -1,11 +1,11 @@
-package com.runescape.wave.service;
+package com.runescape.clan.service;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.runescape.wave.ItemPrice;
-import com.runescape.wave.model.Items;
+import com.runescape.clan.ItemPrice;
+import com.runescape.clan.model.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;

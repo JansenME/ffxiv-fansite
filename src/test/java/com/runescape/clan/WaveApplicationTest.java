@@ -1,4 +1,4 @@
-package com.runescape.wave;
+package com.runescape.clan;
 
 import org.junit.Test;
 import org.slf4j.Logger;

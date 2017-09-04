@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: com.runescape.wave.WaveApplication
+Main-Class: com.runescape.clan.WaveApplication

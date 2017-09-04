@@ -1,8 +1,8 @@
-package com.runescape.wave.controller;
+package com.runescape.clan.controller;
 
-import com.runescape.wave.model.Items;
-import com.runescape.wave.repository.ItemsRepository;
-import com.runescape.wave.service.ItemService;
+import com.runescape.clan.model.Items;
+import com.runescape.clan.repository.ItemsRepository;
+import com.runescape.clan.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

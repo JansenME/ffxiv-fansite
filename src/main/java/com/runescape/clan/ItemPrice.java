@@ -1,4 +1,4 @@
-package com.runescape.wave;
+package com.runescape.clan;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.gson.JsonElement;

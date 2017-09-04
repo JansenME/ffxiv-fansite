@@ -1,4 +1,4 @@
-package com.runescape.wave.model;
+package com.runescape.clan.model;
 
 /**
  * Created by Martijn Jansen on 6/14/2017.

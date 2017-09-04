@@ -1,6 +1,6 @@
-package com.runescape.wave.controller;
+package com.runescape.clan.controller;
 
-import com.runescape.wave.model.MembersInList;
+import com.runescape.clan.model.MembersInList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

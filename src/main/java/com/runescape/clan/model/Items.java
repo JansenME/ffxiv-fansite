@@ -1,4 +1,4 @@
-package com.runescape.wave.model;
+package com.runescape.clan.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

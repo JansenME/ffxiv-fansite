@@ -1,6 +1,6 @@
-package com.runescape.wave.repository;
+package com.runescape.clan.repository;
 
-import com.runescape.wave.model.ExperienceEliteSkills;
+import com.runescape.clan.model.ExperienceEliteSkills;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
