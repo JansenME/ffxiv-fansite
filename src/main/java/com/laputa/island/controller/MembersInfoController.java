@@ -1,9 +1,9 @@
-package com.runescape.clan.controller;
+package com.laputa.island.controller;
 
-import com.runescape.clan.model.AdventurersLogInList;
-import com.runescape.clan.model.Member;
-import com.runescape.clan.model.SkillsInList;
-import com.runescape.clan.repository.MemberRepository;
+import com.laputa.island.model.AdventurersLogInList;
+import com.laputa.island.model.Member;
+import com.laputa.island.model.SkillsInList;
+import com.laputa.island.repository.MemberRepository;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;

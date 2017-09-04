@@ -1,11 +1,11 @@
-package com.runescape.clan.service;
+package com.laputa.island.service;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.runescape.clan.ItemPrice;
-import com.runescape.clan.model.Items;
+import com.laputa.island.ItemPrice;
+import com.laputa.island.model.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;

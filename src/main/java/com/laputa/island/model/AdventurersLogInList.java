@@ -1,4 +1,4 @@
-package com.runescape.clan.model;
+package com.laputa.island.model;
 
 /**
  * Created by Martijn Jansen on 6/17/2017.

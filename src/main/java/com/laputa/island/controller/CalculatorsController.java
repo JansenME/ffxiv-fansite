@@ -1,4 +1,4 @@
-package com.runescape.clan.controller;
+package com.laputa.island.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

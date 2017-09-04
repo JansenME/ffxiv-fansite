@@ -1,6 +1,6 @@
-package com.runescape.clan.controller;
+package com.laputa.island.controller;
 
-import com.runescape.clan.model.MembersInList;
+import com.laputa.island.model.MembersInList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

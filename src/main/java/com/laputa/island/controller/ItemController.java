@@ -1,8 +1,8 @@
-package com.runescape.clan.controller;
+package com.laputa.island.controller;
 
-import com.runescape.clan.model.Items;
-import com.runescape.clan.repository.ItemsRepository;
-import com.runescape.clan.service.ItemService;
+import com.laputa.island.model.Items;
+import com.laputa.island.repository.ItemsRepository;
+import com.laputa.island.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

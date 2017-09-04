@@ -1,6 +1,6 @@
-package com.runescape.clan.repository;
+package com.laputa.island.repository;
 
-import com.runescape.clan.model.ExperienceNormalSkills;
+import com.laputa.island.model.ExperienceNormalSkills;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

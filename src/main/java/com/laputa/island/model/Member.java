@@ -1,4 +1,4 @@
-package com.runescape.clan.model;
+package com.laputa.island.model;
 
 import javax.persistence.*;
 import java.sql.Date;

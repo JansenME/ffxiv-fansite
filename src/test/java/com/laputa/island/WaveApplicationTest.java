@@ -1,4 +1,4 @@
-package com.runescape.clan;
+package com.laputa.island;
 
 import org.junit.Test;
 import org.slf4j.Logger;
