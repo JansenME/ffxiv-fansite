@@ -151,8 +151,8 @@ public class MembersInfoController {
                 Locale locale = new Locale("en", "EN");
                 NumberFormat numberFormat = NumberFormat.getInstance(locale);
 
-                int experienceAsInt = Integer.parseInt(experience);
-                String experienceFormatted = numberFormat.format(experienceAsInt);
+                Long experienceAsLong = Long.parseLong(experience);
+                String experienceFormatted = numberFormat.format(experienceAsLong);
 
                 int rankAsInt = Integer.parseInt(rank);
                 String rankFormatted = numberFormat.format(rankAsInt);
@@ -160,13 +160,13 @@ public class MembersInfoController {
                 int levelAsInt = Integer.parseInt(level);
 
                 if (levelAsInt == 0) level = "1";
-                if (experienceAsInt == -1) experienceFormatted = "0";
+                if (experienceAsLong == -1) experienceFormatted = "0";
                 if (rankAsInt == -1) rankFormatted = "None";
 
-                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsInt, skill, level);
-                int correctVirtualLevelAsInt = Integer.parseInt(correctVirtualLevel);
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceAsLong.toString(), skill, level);
+                Long correctVirtualLevelAsLong = Long.parseLong(correctVirtualLevel);
 
-                String color = getTheCorrectColor(skill, experienceAsInt, correctVirtualLevelAsInt);
+                String color = getTheCorrectColor(skill, experienceAsLong.toString(), correctVirtualLevelAsLong.toString());
 
                 String totalVirtualLevel = null;
                 if (OVERALL.equals(skill)) totalVirtualLevel = Integer.toString(getTotalVirtualLevel(name));
@@ -184,7 +184,7 @@ public class MembersInfoController {
         return list;
     }
 
-    private String getTheCorrectColor(String skill, int experienceAsInt, int correctVirtualLevelAsInt) {
+    private String getTheCorrectColor(String skill, String experience, String correctVirtualLevel) {
         logger.info("In method getTheCorrectColor...");
         final String colorRed = "red";
         final String colorLimegreen = "limegreen";
@@ -196,20 +196,20 @@ public class MembersInfoController {
                 return colorNormal;
 
             case DUNGEONEERING:
-                if (experienceAsInt == 200000000) return colorRed;
-                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
+                if (Long.parseLong(experience) == 200000000) return colorRed;
+                else if (Long.parseLong(correctVirtualLevel) == 120) return colorLimegreen;
                 else return colorNormal;
 
             case INVENTION:
-                if (experienceAsInt == 200000000) return colorRed;
-                else if (correctVirtualLevelAsInt == 150) return colorLimegreen;
-                else if (correctVirtualLevelAsInt >= 120) return colorBold;
+                if (Long.parseLong(experience) == 200000000) return colorRed;
+                else if (Long.parseLong(correctVirtualLevel) == 150) return colorLimegreen;
+                else if (Long.parseLong(correctVirtualLevel) >= 120) return colorBold;
                 else return colorNormal;
 
             default:
-                if (experienceAsInt == 200000000) return colorRed;
-                else if (correctVirtualLevelAsInt == 120) return colorLimegreen;
-                else if (correctVirtualLevelAsInt >= 99) return colorBold;
+                if (Long.parseLong(experience) == 200000000) return colorRed;
+                else if (Long.parseLong(correctVirtualLevel) == 120) return colorLimegreen;
+                else if (Long.parseLong(correctVirtualLevel) >= 99) return colorBold;
                 else return colorNormal;
         }
     }
@@ -230,7 +230,7 @@ public class MembersInfoController {
 
                 skill = getCorrectSkillName(counter);
 
-                int experienceLevel = Integer.parseInt(array[2]);
+                Long experienceLevel = Long.parseLong(array[2]);
 
                 int level = Integer.parseInt(array[1]);
 
@@ -238,7 +238,7 @@ public class MembersInfoController {
                     array[1] = "1";
                 }
 
-                String correctVirtualLevel = setCorrectVirtualLevel(experienceLevel, skill, array[1]);
+                String correctVirtualLevel = setCorrectVirtualLevel(experienceLevel.toString(), skill, array[1]);
 
                 totalLevel = Integer.parseInt(correctVirtualLevel);
 
@@ -320,77 +320,77 @@ public class MembersInfoController {
         }
     }
 
-    private static String setCorrectVirtualLevel(final int totalExperience, final String skill, final String level) {
+    private static String setCorrectVirtualLevel(final String totalExperience, final String skill, final String level) {
         logger.info("In method setCorrectVirtualLevel...");
         String levelToReturn = level;
 
-        if (INVENTION.equals(skill) && totalExperience >= 83370445)
+        if (INVENTION.equals(skill) && Long.parseLong(totalExperience) >= 83370445)
             levelToReturn = setVirtualLevelForInvention(totalExperience, level);
-        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && totalExperience >= 14391160)
+        if ((!INVENTION.equals(skill) && !OVERALL.equals(skill)) && Long.parseLong(totalExperience) >= 14391160)
             levelToReturn = setVirtualLevelForTheRest(totalExperience, level);
 
         return levelToReturn;
     }
 
-    private static String setVirtualLevelForInvention(final int totalExperience, final String level) {
+    private static String setVirtualLevelForInvention(final String totalExperience, final String level) {
         logger.info("In method setVirtualLevelForInvention...");
-        if (totalExperience >= 194927409) return "150";
-        if (totalExperience >= 189921255) return "149";
-        if (totalExperience >= 185007406) return "148";
-        if (totalExperience >= 180184770) return "147";
-        if (totalExperience >= 175452262) return "146";
-        if (totalExperience >= 170808801) return "145";
-        if (totalExperience >= 166253312) return "144";
-        if (totalExperience >= 161784728) return "143";
-        if (totalExperience >= 157401983) return "142";
-        if (totalExperience >= 153104021) return "141";
-        if (totalExperience >= 148889790) return "140";
-        if (totalExperience >= 144758242) return "139";
-        if (totalExperience >= 140708338) return "138";
-        if (totalExperience >= 136739041) return "137";
-        if (totalExperience >= 132849323) return "136";
-        if (totalExperience >= 129038159) return "135";
-        if (totalExperience >= 125304532) return "134";
-        if (totalExperience >= 121647430) return "133";
-        if (totalExperience >= 118065845) return "132";
-        if (totalExperience >= 114558777) return "131";
-        if (totalExperience >= 111125230) return "130";
-        if (totalExperience >= 107764216) return "129";
-        if (totalExperience >= 104474750) return "128";
-        if (totalExperience >= 101255855) return "127";
-        if (totalExperience >= 98106559) return "126";
-        if (totalExperience >= 95025896) return "125";
-        if (totalExperience >= 92012904) return "124";
-        if (totalExperience >= 89066630) return "123";
-        if (totalExperience >= 86186124) return "122";
-        if (totalExperience >= 83370445) return "121";
+        if (Long.parseLong(totalExperience) >= 194927409) return "150";
+        if (Long.parseLong(totalExperience) >= 189921255) return "149";
+        if (Long.parseLong(totalExperience) >= 185007406) return "148";
+        if (Long.parseLong(totalExperience) >= 180184770) return "147";
+        if (Long.parseLong(totalExperience) >= 175452262) return "146";
+        if (Long.parseLong(totalExperience) >= 170808801) return "145";
+        if (Long.parseLong(totalExperience) >= 166253312) return "144";
+        if (Long.parseLong(totalExperience) >= 161784728) return "143";
+        if (Long.parseLong(totalExperience) >= 157401983) return "142";
+        if (Long.parseLong(totalExperience) >= 153104021) return "141";
+        if (Long.parseLong(totalExperience) >= 148889790) return "140";
+        if (Long.parseLong(totalExperience) >= 144758242) return "139";
+        if (Long.parseLong(totalExperience) >= 140708338) return "138";
+        if (Long.parseLong(totalExperience) >= 136739041) return "137";
+        if (Long.parseLong(totalExperience) >= 132849323) return "136";
+        if (Long.parseLong(totalExperience) >= 129038159) return "135";
+        if (Long.parseLong(totalExperience) >= 125304532) return "134";
+        if (Long.parseLong(totalExperience) >= 121647430) return "133";
+        if (Long.parseLong(totalExperience) >= 118065845) return "132";
+        if (Long.parseLong(totalExperience) >= 114558777) return "131";
+        if (Long.parseLong(totalExperience) >= 111125230) return "130";
+        if (Long.parseLong(totalExperience) >= 107764216) return "129";
+        if (Long.parseLong(totalExperience) >= 104474750) return "128";
+        if (Long.parseLong(totalExperience) >= 101255855) return "127";
+        if (Long.parseLong(totalExperience) >= 98106559) return "126";
+        if (Long.parseLong(totalExperience) >= 95025896) return "125";
+        if (Long.parseLong(totalExperience) >= 92012904) return "124";
+        if (Long.parseLong(totalExperience) >= 89066630) return "123";
+        if (Long.parseLong(totalExperience) >= 86186124) return "122";
+        if (Long.parseLong(totalExperience) >= 83370445) return "121";
 
         return level;
     }
 
-    private static String setVirtualLevelForTheRest(final int totalExperience, final String level) {
+    private static String setVirtualLevelForTheRest(final String totalExperience, final String level) {
         logger.info("In method setVirtualLevelForTheRest...");
-        if (totalExperience >= 104273167) return "120";
-        if (totalExperience >= 94442737) return "119";
-        if (totalExperience >= 85539082) return "118";
-        if (totalExperience >= 77474828) return "117";
-        if (totalExperience >= 70170840) return "116";
-        if (totalExperience >= 63555443) return "115";
-        if (totalExperience >= 57563718) return "114";
-        if (totalExperience >= 52136869) return "113";
-        if (totalExperience >= 47221641) return "112";
-        if (totalExperience >= 42769801) return "111";
-        if (totalExperience >= 38737661) return "110";
-        if (totalExperience >= 35085654) return "109";
-        if (totalExperience >= 31777943) return "108";
-        if (totalExperience >= 28782069) return "107";
-        if (totalExperience >= 26068632) return "106";
-        if (totalExperience >= 23611006) return "105";
-        if (totalExperience >= 21385073) return "104";
-        if (totalExperience >= 19368992) return "103";
-        if (totalExperience >= 17542976) return "102";
-        if (totalExperience >= 15889109) return "101";
-        if (totalExperience >= 14391160) return "100";
+        if (Long.parseLong(totalExperience) >= 104273167) return "120";
+        if (Long.parseLong(totalExperience) >= 94442737) return "119";
+        if (Long.parseLong(totalExperience) >= 85539082) return "118";
+        if (Long.parseLong(totalExperience) >= 77474828) return "117";
+        if (Long.parseLong(totalExperience) >= 70170840) return "116";
+        if (Long.parseLong(totalExperience) >= 63555443) return "115";
+        if (Long.parseLong(totalExperience) >= 57563718) return "114";
+        if (Long.parseLong(totalExperience) >= 52136869) return "113";
+        if (Long.parseLong(totalExperience) >= 47221641) return "112";
+        if (Long.parseLong(totalExperience) >= 42769801) return "111";
+        if (Long.parseLong(totalExperience) >= 38737661) return "110";
+        if (Long.parseLong(totalExperience) >= 35085654) return "109";
+        if (Long.parseLong(totalExperience) >= 31777943) return "108";
+        if (Long.parseLong(totalExperience) >= 28782069) return "107";
+        if (Long.parseLong(totalExperience) >= 26068632) return "106";
+        if (Long.parseLong(totalExperience) >= 23611006) return "105";
+        if (Long.parseLong(totalExperience) >= 21385073) return "104";
+        if (Long.parseLong(totalExperience) >= 19368992) return "103";
+        if (Long.parseLong(totalExperience) >= 17542976) return "102";
+        if (Long.parseLong(totalExperience) >= 15889109) return "101";
+        if (Long.parseLong(totalExperience) >= 14391160) return "100";
 
         return level;
     }
