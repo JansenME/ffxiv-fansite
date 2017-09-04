@@ -154,14 +154,14 @@ public class MembersInfoController {
                 Long experienceAsLong = Long.parseLong(experience);
                 String experienceFormatted = numberFormat.format(experienceAsLong);
 
-                int rankAsInt = Integer.parseInt(rank);
-                String rankFormatted = numberFormat.format(rankAsInt);
+                Long rankAsLong = Long.parseLong(rank);
+                String rankFormatted = numberFormat.format(rankAsLong);
 
-                int levelAsInt = Integer.parseInt(level);
+                Long levelAsLong = Long.parseLong(level);
 
-                if (levelAsInt == 0) level = "1";
+                if (levelAsLong == 0) level = "1";
                 if (experienceAsLong == -1) experienceFormatted = "0";
-                if (rankAsInt == -1) rankFormatted = "None";
+                if (rankAsLong == -1) rankFormatted = "None";
 
                 String correctVirtualLevel = setCorrectVirtualLevel(experienceAsLong.toString(), skill, level);
                 Long correctVirtualLevelAsLong = Long.parseLong(correctVirtualLevel);
