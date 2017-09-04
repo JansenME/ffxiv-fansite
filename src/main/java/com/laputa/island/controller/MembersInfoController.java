@@ -42,6 +42,8 @@ public class MembersInfoController {
     private static final String DUNGEONEERING = "dungeoneering";
     private static final String OVERALL = "overall";
 
+    private static String gender;
+
     @Autowired
     private MemberRepository memberRepository;
 
@@ -94,7 +96,13 @@ public class MembersInfoController {
                 list.add(new AdventurersLogInList(formattedDate, title, description));
             }
         } catch (IOException i) {
-            list.add(new AdventurersLogInList(null, name + " has set his/her adventurers log to private",""));
+            if ("male".equalsIgnoreCase(gender)) {
+                list.add(new AdventurersLogInList(null, name + " has set his adventurers log to private mode",""));
+            } else if ("female".equalsIgnoreCase(gender)) {
+                list.add(new AdventurersLogInList(null, name + " has set her adventurers log to private mode",""));
+            } else {
+                list.add(new AdventurersLogInList(null, name + " has set his/her adventurers log to private mode",""));
+            }
             return list;
         }
         return list;
@@ -108,11 +116,11 @@ public class MembersInfoController {
         if (member.getBiography() == null) biography = "This member did not give us an amazing text about themself!";
         else biography = member.getBiography();
 
-        //Capitalize gender
-        String gender;
-
-        if (member.getGender() == null) gender = UNKNOWN;
-        else gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
+        if (member.getGender() == null) {
+            gender = UNKNOWN;
+        } else {
+            gender = member.getGender().substring(0, 1).toUpperCase() + member.getGender().substring(1);
+        }
 
         //Get the correct lines for the city
         member.setCityStateCountry(member.getCity(), member.getState(), member.getCountry());
