@@ -36,8 +36,10 @@ public class MemberInfoService {
 
     private String gender;
 
-    public ModelAndView getMemberPageInfo(String name, Member member) throws IOException, FeedException, ParseException {
+    public ModelAndView getMemberPageInfo(Member member) throws IOException, FeedException, ParseException {
         logger.info("In method getMemberPageInfo...");
+
+        String name = member.getName();
 
         List<SkillsInList> memberLevelsList = getMemberLevelsList(name);
         List<AdventurersLogInList> adventurersLogList = getAdventurersLogList(name);

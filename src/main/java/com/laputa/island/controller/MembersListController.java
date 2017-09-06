@@ -1,6 +1,8 @@
 package com.laputa.island.controller;
 
 import com.laputa.island.model.MembersInList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ import java.util.Locale;
  */
 @Controller
 public class MembersListController {
+    private static final Logger logger = LoggerFactory.getLogger(MembersListController.class);
+
     private Long totalExperienceClan = 0L;
 
     @RequestMapping(value = "/members", method = RequestMethod.POST)
@@ -30,6 +34,7 @@ public class MembersListController {
 
     @RequestMapping(value = "/members", method = RequestMethod.GET)
     public ModelAndView getMembers() throws IOException {
+        logger.info("In method getMembers...");
 
         List<MembersInList> list = setMembersList();
 

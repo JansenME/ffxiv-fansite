@@ -31,7 +31,7 @@ public class MemberInfoController {
         Member member = memberRepository.findOneByName(name);
 
         MemberInfoService memberInfoService = new MemberInfoService();
-        ModelAndView model = memberInfoService.getMemberPageInfo(name, member);
+        ModelAndView model = memberInfoService.getMemberPageInfo(member);
 
         return model;
     }
