@@ -19,29 +19,25 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class ItemService {
-    private ItemService() {
-
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private static final String POSITIVE = "positive";
 
-    private static String itemIconSmall;
-    private static String itemDescription;
-    private static String itemIconLarge;
-    private static String itemName;
-    private static String itemType;
-    private static String itemTodayTrend;
-    private static String itemTodayPrice;
-    private static String itemMembers;
-    private static String itemDay30Trend;
-    private static String itemDay30Change;
-    private static String itemDay90Trend;
-    private static String itemDay90Change;
-    private static String itemDay180Trend;
-    private static String itemDay180Change;
+    private String itemIconSmall;
+    private String itemDescription;
+    private String itemIconLarge;
+    private String itemName;
+    private String itemType;
+    private String itemTodayTrend;
+    private String itemTodayPrice;
+    private String itemMembers;
+    private String itemDay30Trend;
+    private String itemDay30Change;
+    private String itemDay90Trend;
+    private String itemDay90Change;
+    private String itemDay180Trend;
+    private String itemDay180Change;
 
-    public static ModelAndView itemListService(List<Items> itemList) {
+    public ModelAndView itemListService(List<Items> itemList) {
         logger.info("Sorting list and setting ModelAndView");
 
         itemList.sort((item1, item2) -> item1.getNameItem().compareToIgnoreCase(item2.getNameItem()));
@@ -52,7 +48,7 @@ public class ItemService {
         return model;
     }
 
-    public static ModelAndView showItemService(final Items item) throws IOException {
+    public ModelAndView showItemService(final Items item) throws IOException {
         Long itemID = item.getRunescapeId();
 
         ModelAndView model = new ModelAndView("item");
@@ -101,7 +97,7 @@ public class ItemService {
         return model;
     }
 
-    public static void getInfoItemService(Long itemId) throws IOException {
+    public void getInfoItemService(Long itemId) throws IOException {
         URL link = new URL("http://services.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=" + itemId);
         URLConnection conn = link.openConnection();
 

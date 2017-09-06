@@ -28,16 +28,18 @@ public class ItemController {
 
     @RequestMapping(value = "/items", method = RequestMethod.GET)
     public ModelAndView itemList() {
-        List<Items> itemList = (itemsRepository).findAll();
+        List<Items> itemList = itemsRepository.findAll();
 
-        return ItemService.itemListService(itemList);
+        ItemService itemService = new ItemService();
+        return itemService.itemListService(itemList);
     }
 
     @RequestMapping(value = "/item/{ownItemId}", method = RequestMethod.GET)
     public ModelAndView showItem(@PathVariable Long ownItemId) throws IOException {
         Items item = itemsRepository.findOne(ownItemId);
 
-        return ItemService.showItemService(item);
+        ItemService itemService = new ItemService();
+        return itemService.showItemService(item);
     }
 
     @RequestMapping(value = "/createItem", method = RequestMethod.GET)
@@ -49,7 +51,8 @@ public class ItemController {
 
     @RequestMapping(value = "/createItem", method = RequestMethod.POST)
     public String createItem(@ModelAttribute("itemsForm") Items itemForm, BindingResult bindingResult, Model model) throws IOException {
-        ItemService.getInfoItemService(itemForm.getRunescapeId());
+        ItemService itemService = new ItemService();
+        itemService.getInfoItemService(itemForm.getRunescapeId());
 
         itemForm.setNameItem(this.itemName);
         itemsRepository.save(itemForm);

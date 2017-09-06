@@ -34,15 +34,15 @@ import java.util.Locale;
 
 @SuppressWarnings("unchecked")
 @Controller
-public class MembersInfoController {
-    private static final Logger logger = LoggerFactory.getLogger(MembersInfoController.class);
+public class MemberInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(MemberInfoController.class);
 
     private static final String UNKNOWN = "unknown";
     private static final String INVENTION = "invention";
     private static final String DUNGEONEERING = "dungeoneering";
     private static final String OVERALL = "overall";
 
-    private static String gender;
+    private String gender;
 
     @Autowired
     private MemberRepository memberRepository;
