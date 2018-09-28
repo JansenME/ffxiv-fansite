@@ -25,7 +25,7 @@
         <div>
             <h3>Laputa Island</h3>
             <div class="first">
-                <p>We are a tier 7 clan with 3 avatars<br />
+                <p>We are a tier 7 clan with 3 avatars<br/>
                     Laputa Island is a very unique clan, with a strong focus on community. Everyone is accepted and
                     welcomed into the family, no matter how new to RuneScape or clans they may be. The main goal of
                     Laputa Island is to provide a fun, relaxed, and enjoyable environment in which all players can enjoy
