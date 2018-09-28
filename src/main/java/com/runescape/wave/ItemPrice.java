@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -20,8 +19,7 @@ import java.util.TreeSet;
 public class ItemPrice {
     private static final Logger logger = LoggerFactory.getLogger(ItemPrice.class);
 
-    ItemPrice() {
-        logger.info("I'm not supposed to be in this ItemPrice constructor.");
+    private ItemPrice() {
     }
 
     public static BigDecimal getItemPrice(URL link, Long itemId) {
@@ -33,8 +31,8 @@ public class ItemPrice {
             conn = link.openConnection();
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             logger.info("I succesfully got a stream for you.");
-        } catch (IOException ioe) {
-            logger.error("I failed getting a stream.");
+        } catch (Exception e) {
+            logger.error("I failed getting a stream.", e);
             return BigDecimal.valueOf(0);
         }
 
