@@ -9,15 +9,15 @@ import static org.junit.Assert.assertEquals;
 
 public class ItemPriceTest {
     @Test
-	public void getItemPriceTest() {
+    public void getItemPriceTest() {
         URL link = getClass().getClassLoader().getResource("itemPriceTest.json");
 
-		BigDecimal price = ItemPrice.getItemPrice(link, 0L);
+        BigDecimal price = ItemPrice.getItemPrice(link, 0L);
 
-		assertEquals(500, price.intValue());
-	}
+        assertEquals(500, price.intValue());
+    }
 
-	@Test
+    @Test
     public void getItemPriceTestFileNotFound() {
         URL link = getClass().getClassLoader().getResource("itemPriceTestNotHere.json");
         BigDecimal price = ItemPrice.getItemPrice(link, 0L);
