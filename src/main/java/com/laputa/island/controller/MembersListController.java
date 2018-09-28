@@ -28,8 +28,7 @@ public class MembersListController {
         logger.info("In method getMembers...");
 
         MembersListService membersListService = new MembersListService();
-        ModelAndView model = membersListService.getMembers();
 
-        return model;
+        return membersListService.getMembers();
     }
 }
