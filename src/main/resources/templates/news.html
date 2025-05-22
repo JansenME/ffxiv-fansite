@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Final Fantasy Fan Site</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" th:href="@{styles/css/main.css}" />
+	</head>
+	<body>
+		<div id="page-wrapper">
+				<section id="header">
+					<div class="container">
+						<h1><a href="index" id="logo">Final Fantasy Fan Site</a></h1>
+
+						<nav id="nav">
+							<a href="index">Homepage</a>
+							<a href="news">News</a>
+						</nav>
+					</div>
+				</section>
+
+				<section id="content">
+					<div class="container">
+						<section>
+							<header>
+								<h2>Title</h2>
+								<h3>Time</h3>
+							</header>
+							<p>Message</p>
+							<a href="#" class="button-large">Original message</a>
+						</section>
+
+						<section>
+							<header>
+								<h2>Title</h2>
+								<h3>Time</h3>
+							</header>
+							<p>Message</p>
+							<a href="#" class="button-large">Original message</a>
+						</section>
+					</div>
+				</section>
+
+			<div id="copyright">
+				&copy; 2024-<span th:text="${currentYear}"></span> Martijn Jansen. All rights reserved. Version <span th:text="${versionNumber}"></span> | FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
+			</div>
+		</div>
+	</body>
+</html>
