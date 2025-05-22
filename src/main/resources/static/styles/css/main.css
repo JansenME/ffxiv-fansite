@@ -169,6 +169,7 @@ p, a, img, header, nav, section {
 		background: #f7f7f7 url("images/bg03.png");
 		border-top: solid 1px #fff;
 		padding: 45px 0 45px 0;
+		text-align: center;
 	}
 
 		#content section {
@@ -187,11 +188,16 @@ p, a, img, header, nav, section {
 		#content h3 {
 			color: #96a9b5;
 			font-size: 1.25em;
+			font-style: italic;
 		}
 
 		#content a {
 			color: #ED391B;
 		}
+
+		#content p {
+        	white-space: pre-wrap;
+        }
 
 		#content header {
 			margin: 0 0 2em 0;

@@ -21,22 +21,14 @@
 
 				<section id="content">
 					<div class="container">
-						<section>
+						<section th:each="newsItem : ${news}">
 							<header>
-								<h2>Title</h2>
-								<h3>Time</h3>
+								<h2 th:text="${newsItem.getTitle()}"></h2>
+								<h3 th:text="${newsItem.getTime()}"></h3>
+								<img th:src="${newsItem.getImage()}" th:alt="${newsItem.getTitle()}"/>
 							</header>
-							<p>Message</p>
-							<a href="#" class="button-large">Original message</a>
-						</section>
-
-						<section>
-							<header>
-								<h2>Title</h2>
-								<h3>Time</h3>
-							</header>
-							<p>Message</p>
-							<a href="#" class="button-large">Original message</a>
+							<p th:text="${newsItem.getDescription()}"></p>
+							<a th:href="${newsItem.getUrl()}" class="button-large">Original message</a>
 						</section>
 					</div>
 				</section>
