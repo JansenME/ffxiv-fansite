@@ -9,13 +9,7 @@
 	<body>
 		<div id="page-wrapper">
 				<section id="header">
-					<div class="container">
-						<h1><a href="index" id="logo">Final Fantasy Fan Site</a></h1>
-
-						<nav id="nav">
-							<a href="index">Homepage</a>
-							<a href="news">News</a>
-						</nav>
+					<div th:insert="~{inserts/nav :: nav}" class="container">
 					</div>
 
 					<div id="banner">
@@ -28,8 +22,7 @@
 				<section id="content">
 				</section>
 
-				<div id="copyright">
-					&copy; 2024-<span th:text="${currentYear}"></span> Martijn Jansen. All rights reserved. Version <span th:text="${versionNumber}"></span> | FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.
+				<div th:insert="~{inserts/copyright :: copyright}" id="copyright">
 				</div>
 		</div>
 	</body>

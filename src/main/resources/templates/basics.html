@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" th:href="@{styles/css/main.css}" />
 	</head>
-	<body>
+	<body class="subpage">
 		<div id="page-wrapper">
 			<section id="header">
 				<div th:insert="~{inserts/nav :: nav}" class="container">
@@ -15,15 +15,21 @@
 
 			<section id="content">
 				<div class="container">
-					<section th:each="newsItem : ${news}">
-						<header>
-							<h2 th:text="${newsItem.getTitle()}"></h2>
-							<h3 th:text="${newsItem.getTime()}"></h3>
-							<img th:src="${newsItem.getImage()}" th:alt="${newsItem.getTitle()}"/>
-						</header>
-						<p th:text="${newsItem.getDescription()}"></p>
-						<a th:href="${newsItem.getUrl()}" target="_blank" class="button-large">Original message</a>
-					</section>
+					<div class="row">
+						<div th:insert="~{inserts/nav-basics :: nav-basics}" class="col-3 col-12-medium">
+						</div>
+
+						<div class="col-9 col-12-medium imp-medium">
+							<section>
+								<header>
+									<h2>Basics</h2>
+									<br />
+									<br />
+									<h4><---------------</h4>
+								</header>
+							</section>
+						</div>
+					</div>
 				</div>
 			</section>
 
