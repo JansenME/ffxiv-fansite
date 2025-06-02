@@ -31,6 +31,7 @@
 		<httpclient.version>4.5.14</httpclient.version>
 		<commonscsv.version>1.14.0</commonscsv.version>
 		<commonslang.version>3.17.0</commonslang.version>
+		<opencsv.version>5.11</opencsv.version>
 		<junit.version>4.13.2</junit.version>
 	</properties>
 
@@ -67,14 +68,14 @@
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-csv</artifactId>
-			<version>${commonscsv.version}</version>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commonslang.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commonslang.version}</version>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
 		</dependency>
 
 		<!--TEST DEPENDENCIES-->

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Final Fantasy Fan Site</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" th:href="@{styles/css/main.css}" />
+	</head>
+	<body class="subpage">
+		<div id="page-wrapper">
+			<section id="header">
+				<div th:insert="~{inserts/nav :: nav}" class="container">
+				</div>
+			</section>
+
+			<section id="content">
+				<div class="container">
+					<div class="row">
+						<div th:insert="~{inserts/nav-basics :: nav-basics}" class="col-3 col-12-medium">
+						</div>
+
+						<div class="col-9 col-12-medium imp-medium">
+							<section>
+								<header>
+									<h2>Base classes / Jobs</h2>
+								</header>
+
+								<table>
+									<thead>
+										<tr>
+											<th>Base class</th>
+											<th>Job</th>
+											<th>Code</th>
+											<th>Role</th>
+											<th>Starting location</th>
+											<th>Starting level</th>
+											<th>Armor type</th>
+											<th>Accessory type</th>
+											<th>Expansion</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="job : ${jobs}">
+											<td>
+												<img th:if="${!job.getBaseClassImageName().isEmpty()}"
+													 th:src="@{../images/classes/{imagename}(imagename=${job.getBaseClassImageName()})}"
+												/>
+												<span th:text="${job.getBaseClass()}"></span>
+											</td>
+											<td>
+												<img th:src="@{../images/jobs/{imagename}(imagename=${job.getJobImageName()})}"
+												/>
+												<span th:text="${job.getJob()}"></span>
+											</td>
+											<td th:text="${job.getCode()}"></td>
+											<td>
+												<img
+													th:src="@{../images/roles/{imagename}(imagename=${job.getRole().getImageName()})}"
+													th:title="@{{rolename}(rolename=${job.getRole().getFrontendTitle()})}"
+												/>
+											</td>
+											<td>
+												<img th:src="@{../images/majorcities/{imagename}(imagename=${job.getStartingLocation().getImageName()})}" />
+												<span th:text="${job.getStartingLocation().getName()}"></span>
+											</td>
+											<td th:text="${job.getStartingLevel()}"></td>
+											<td th:text="${job.getArmorType().getName()}"></td>
+											<td th:text="${job.getAccessoryType().getName()}"></td>
+											<td>
+												<img th:if="${job.getExpansion() != null}"
+													 th:src="@{../images/expansions/{imagename}(imagename=${job.getExpansion().getImageName()})}"
+												/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</section>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div th:insert="~{inserts/copyright :: copyright}" id="copyright">
+			</div>
+		</div>
+	</body>
+</html>

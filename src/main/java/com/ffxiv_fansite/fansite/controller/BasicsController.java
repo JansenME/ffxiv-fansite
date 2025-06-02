@@ -33,7 +33,7 @@ public class BasicsController {
     public String basicsJobs(Model model) {
         fillModel(model);
 
-        //TODO
+        model.addAttribute("jobs", basicsService.getJobs());
 
         return "basics-jobs";
     }
@@ -45,6 +45,8 @@ public class BasicsController {
         model.addAttribute("expansionList", basicsService.getExpansions());
         model.addAttribute("majorCitiesList", basicsService.getMajorCities());
         model.addAttribute("minorCitiesList", basicsService.getMinorCities());
+
+        //TODO model.addAttribute("craftinggatheringclasses", basicsService.getCraftingAndGatheringClasses());
 
         return "basics-cities";
     }
