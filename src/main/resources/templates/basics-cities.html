@@ -28,7 +28,10 @@
 									<h3 th:text="${expansion.getName()}"></h3>
 									<ul class="link-list">
 										<span th:each="city : ${majorCitiesList}">
-											<li th:if="${city.getExpansion().getName().equals(expansion.getName())}" th:text="${city.getName()}"></li>
+											<li th:if="${city.getExpansion().getName().equals(expansion.getName())}">
+												<img th:src="@{../images/majorcities/{imagename}(imagename=${city.getImageName()})}" />
+												<span th:text="${city.getName()}"></span>
+											</li>
 										</span>
 									</ul>
 								</span>
