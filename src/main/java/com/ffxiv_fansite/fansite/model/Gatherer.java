@@ -11,6 +11,7 @@ public class Gatherer {
     private String discipleOf;
     private Role role;
     private MajorCity guildLocation;
+    private String goods;
     private String imageName;
 
     public static Gatherer mapCsvLineToGatherer(final String[] csvLine) {
@@ -20,7 +21,8 @@ public class Gatherer {
                 csvLine[2],
                 Role.getRoleByName(csvLine[3]),
                 MajorCity.getMajorCityByName(csvLine[4]),
-                csvLine[5]
+                csvLine[5],
+                csvLine[6]
                 );
     }
 }

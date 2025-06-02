@@ -1,4 +1,4 @@
-class, code, discipleof, role, guildlocation, imagename
-"Miner","MIN","Land","Gathering","Ul'dah", "miner.png"
-"Botanist","BTN","Land","Gathering","Gridania", "botanist.png"
-"Fisher","FSH","Land","Gathering","LimsaLominsa", "fisher.png"
+class, code, discipleof, role, guildlocation, goods, imagename
+"Miner","MIN","Land","Gathering","Ul'dah", "Mineral", "miner.png"
+"Botanist","BTN","Land","Gathering","Gridania", "Lumber, Ingredient", "botanist.png"
+"Fisher","FSH","Land","Gathering","LimsaLominsa", "Fish", "fisher.png"

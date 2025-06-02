@@ -11,6 +11,7 @@ public class Crafter {
     private String discipleOf;
     private Role role;
     private MajorCity guildLocation;
+    private String goods;
     private String imageName;
 
     public static Crafter mapCsvLineToCrafter(final String[] csvLine) {
@@ -20,7 +21,8 @@ public class Crafter {
                 csvLine[2],
                 Role.getRoleByName(csvLine[3]),
                 MajorCity.getMajorCityByName(csvLine[4]),
-                csvLine[5]
+                csvLine[5],
+                csvLine[6]
         );
     }
 }
