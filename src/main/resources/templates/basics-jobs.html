@@ -74,6 +74,52 @@
 										</tr>
 									</tbody>
 								</table>
+							</section>
+
+							<section>
+								<header>
+									<h2>Crafters and Gatherers</h2>
+								</header>
+
+								<table>
+									<thead>
+									<tr>
+										<th>Class</th>
+										<th>Code</th>
+										<th>Disciple of</th>
+										<th>Role</th>
+										<th>Guild location</th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr th:each="crafter : ${crafters}">
+											<td>
+												<img th:src="@{../images/classes/{imagename}(imagename=${crafter.getImageName()})}" />
+												<span th:text="${crafter.getBaseClass()}"></span>
+											</td>
+											<td th:text="${crafter.getCode()}"></td>
+											<td th:text="${crafter.getDiscipleOf()}"></td>
+											<td th:text="${crafter.getRole().getName()}"></td>
+											<td>
+												<img th:src="@{../images/majorcities/{imagename}(imagename=${crafter.getGuildLocation().getImageName()})}" />
+												<span th:text="${crafter.getGuildLocation().getName()}"></span>
+											</td>
+										</tr>
+										<tr th:each="gatherer : ${gatherers}">
+											<td>
+												<img th:src="@{../images/classes/{imagename}(imagename=${gatherer.getImageName()})}" />
+												<span th:text="${gatherer.getBaseClass()}"></span>
+											</td>
+											<td th:text="${gatherer.getCode()}"></td>
+											<td th:text="${gatherer.getDiscipleOf()}"></td>
+											<td th:text="${gatherer.getRole().getName()}"></td>
+											<td>
+												<img th:src="@{../images/majorcities/{imagename}(imagename=${gatherer.getGuildLocation().getImageName()})}" />
+												<span th:text="${gatherer.getGuildLocation().getName()}"></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
 
 							</section>
 						</div>

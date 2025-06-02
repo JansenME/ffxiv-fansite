@@ -17,4 +17,20 @@ public class Job {
     private Expansion expansion;
     private String baseClassImageName;
     private String jobImageName;
+
+    public static Job mapCsvLineToJob(final String[] csvLine) {
+        return new Job(
+                csvLine[0],
+                csvLine[1],
+                csvLine[2],
+                Role.getRoleByName(csvLine[3]),
+                MajorCity.getMajorCityByName(csvLine[4]),
+                Integer.parseInt(csvLine[5]),
+                ArmorType.getArmorTypeByName(csvLine[6]),
+                AccessoryType.getAccessoryTypeByName(csvLine[7]),
+                Expansion.getExpansionByName(csvLine[8]),
+                csvLine[9],
+                csvLine[10]
+        );
+    }
 }

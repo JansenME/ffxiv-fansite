@@ -1,0 +1,9 @@
+baseclass, code, discipleof, role, guildlocation, imagename
+"Carpenter","CRP","Hand","Crafting","Gridania", "carpenter.png"
+"Blacksmith","BSM","Hand","Crafting","LimsaLominsa", "blacksmith.png"
+"Armorer","ARM","Hand","Crafting","LimsaLominsa", "armorer.png"
+"Goldsmith","GSM","Hand","Crafting","Ul'dah", "goldsmith.png"
+"Leatherworker","LTW","Hand","Crafting","Gridania", "leatherworker.png"
+"Weaver","WVR","Hand","Crafting","Ul'dah", "weaver.png"
+"Alchemist","ALC","Hand","Crafting","Ul'dah", "alchemist.png"
+"Culinarian","CUL","Hand","Crafting","LimsaLominsa", "culinarian.png"

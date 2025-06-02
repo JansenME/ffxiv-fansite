@@ -1,0 +1,4 @@
+class, code, discipleof, role, guildlocation, imagename
+"Miner","MIN","Land","Gathering","Ul'dah", "miner.png"
+"Botanist","BTN","Land","Gathering","Gridania", "botanist.png"
+"Fisher","FSH","Land","Gathering","LimsaLominsa", "fisher.png"

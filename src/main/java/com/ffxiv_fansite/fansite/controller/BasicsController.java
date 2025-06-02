@@ -34,6 +34,8 @@ public class BasicsController {
         fillModel(model);
 
         model.addAttribute("jobs", basicsService.getJobs());
+        model.addAttribute("crafters", basicsService.getCrafters());
+        model.addAttribute("gatherers", basicsService.getGatherers());
 
         return "basics-jobs";
     }
@@ -45,8 +47,6 @@ public class BasicsController {
         model.addAttribute("expansionList", basicsService.getExpansions());
         model.addAttribute("majorCitiesList", basicsService.getMajorCities());
         model.addAttribute("minorCitiesList", basicsService.getMinorCities());
-
-        //TODO model.addAttribute("craftinggatheringclasses", basicsService.getCraftingAndGatheringClasses());
 
         return "basics-cities";
     }
