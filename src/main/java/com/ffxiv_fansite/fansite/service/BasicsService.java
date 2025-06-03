@@ -78,7 +78,7 @@ public class BasicsService {
 
     private List<String[]> readCsv(final String filename) {
         try (Reader reader = new BufferedReader(Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(filename).toURI())));
-             CSVReader csvReader = new CSVReader(reader);) {
+             CSVReader csvReader = new CSVReader(reader)) {
             return csvReader.readAll();
         } catch (IOException | CsvException | URISyntaxException e) {
             return new ArrayList<>();

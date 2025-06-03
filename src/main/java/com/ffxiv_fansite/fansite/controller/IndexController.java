@@ -1,22 +1,23 @@
 package com.ffxiv_fansite.fansite.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.ffxiv_fansite.fansite.service.CommonsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Controller
 public class IndexController {
-    @Value("${app.version:unknown}")
-    String version;
+    private final CommonsService commonsService;
+
+    @Autowired
+    public IndexController(final CommonsService commonsService) {
+        this.commonsService = commonsService;
+    }
 
     @GetMapping(value={"", "/", "/index"})
     public String index(Model model) {
-        model.addAttribute("versionNumber", version);
-        model.addAttribute("currentYear", new SimpleDateFormat("yyyy").format(new Date()));
+        commonsService.fillModel(model);
 
         return "index";
     }

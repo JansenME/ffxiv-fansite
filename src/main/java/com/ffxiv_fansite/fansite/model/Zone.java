@@ -7,7 +7,7 @@ public enum Zone {
     LIMSA_LOMINSA_UPPER_DECKS("Limsa Lominsa Upper Decks", Region.LA_NOSCEA),
     LIMSA_LOMINSA_LOWER_DECKS("Limsa Lominsa Lower Decks", Region.LA_NOSCEA),
     MIST("Mist", Region.LA_NOSCEA),
-    WOLVES_DEN_PIER("Wolves' De Pier", Region.LA_NOSCEA),
+    WOLVES_DEN_PIER("Wolves' Den Pier", Region.LA_NOSCEA),
     MIDDLE_LA_NOSCEA("Middle La Noscea", Region.LA_NOSCEA),
     LOWER_LA_NOSCEA("Lower La Noscea", Region.LA_NOSCEA),
     EASTERN_LA_NOSCEA("Eastern La Noscea", Region.LA_NOSCEA),
