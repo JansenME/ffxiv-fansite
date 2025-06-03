@@ -43,6 +43,16 @@ class BasicsServiceTest {
         jobs.forEach(this::assertOneJob);
     }
 
+    @Test
+    void testGetCraftersHappyFlow() {
+        assertEquals(8, basicsService.getCrafters().size());
+    }
+
+    @Test
+    void testGetGatherersHappyFlow() {
+        assertEquals(3, basicsService.getGatherers().size());
+    }
+
     private void assertOneJob(final Job job) {
         if (job.getBaseClass().equalsIgnoreCase("—")) {
             assertTrue(job.getBaseClassImageName().isEmpty());
