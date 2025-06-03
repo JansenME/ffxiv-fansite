@@ -6,6 +6,8 @@ import com.ffxiv_fansite.fansite.model.Gatherer;
 import com.ffxiv_fansite.fansite.model.Job;
 import com.ffxiv_fansite.fansite.model.MajorCity;
 import com.ffxiv_fansite.fansite.model.MinorCity;
+import com.ffxiv_fansite.fansite.model.Region;
+import com.ffxiv_fansite.fansite.model.Zone;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +66,14 @@ public class BasicsService {
         return csvLines.stream()
                 .map(Gatherer::mapCsvLineToGatherer)
                 .toList();
+    }
+
+    public List<Region> getRegions() {
+        return Arrays.stream(Region.values()).toList();
+    }
+
+    public List<Zone> getZones() {
+        return Arrays.stream(Zone.values()).toList();
     }
 
     private List<String[]> readCsv(final String filename) {

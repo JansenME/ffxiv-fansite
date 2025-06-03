@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
+@RequestMapping("/basics")
 public class BasicsController {
     @Value("${app.version:unknown}")
     String version;
@@ -22,14 +24,14 @@ public class BasicsController {
         this.basicsService = basicsService;
     }
 
-    @GetMapping("/basics")
+    @GetMapping({"", "/"})
     public String basics(Model model) {
         fillModel(model);
 
         return "basics";
     }
 
-    @GetMapping("basics-jobs")
+    @GetMapping("jobs")
     public String basicsJobs(Model model) {
         fillModel(model);
 
@@ -40,15 +42,25 @@ public class BasicsController {
         return "basics-jobs";
     }
 
-    @GetMapping("basics-cities")
+    @GetMapping("cities")
     public String basicsCities(Model model) {
         fillModel(model);
 
-        model.addAttribute("expansionList", basicsService.getExpansions());
-        model.addAttribute("majorCitiesList", basicsService.getMajorCities());
-        model.addAttribute("minorCitiesList", basicsService.getMinorCities());
+        model.addAttribute("expansions", basicsService.getExpansions());
+        model.addAttribute("majorCities", basicsService.getMajorCities());
+        model.addAttribute("minorCities", basicsService.getMinorCities());
 
         return "basics-cities";
+    }
+
+    @GetMapping("zones")
+    public String basicsZones(Model model) {
+        fillModel(model);
+
+        model.addAttribute("regions", basicsService.getRegions());
+        model.addAttribute("zones", basicsService.getZones());
+
+        return "basics-zones";
     }
 
     private void fillModel(Model model) {

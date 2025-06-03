@@ -9,24 +9,27 @@
 	<body class="subpage">
 		<div id="page-wrapper">
 			<section id="header">
-				<div th:insert="~{inserts/nav :: nav}" class="container">
-				</div>
+				<div th:insert="~{inserts/nav :: nav}" class="container"></div>
 			</section>
 
 			<section id="content">
 				<div class="container">
 					<div class="row">
-						<div th:insert="~{inserts/nav-basics :: nav-basics}" class="col-3 col-12-medium">
-						</div>
+						<div th:insert="~{inserts/nav-basics :: nav-basics}" class="col-3 col-12-medium"></div>
 
 						<div class="col-9 col-12-medium imp-medium">
 							<section>
 								<header>
-									<h2>Basics</h2>
-									<br />
-									<br />
-									<h4><---------------</h4>
+									<h2>Zones</h2>
 								</header>
+								<span th:each="region : ${regions}">
+									<h3 th:text="${region.getName()}"></h3>
+									<ul class="link-list">
+										<span th:each="zone : ${zones}">
+											<li th:if="${zone.getRegion().getName().equals(region.getName())}" th:text="${zone.getName()}"></li>
+										</span>
+									</ul>
+								</span>
 							</section>
 						</div>
 					</div>

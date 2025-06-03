@@ -4,7 +4,7 @@
 		<title>Final Fantasy Fan Site</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" th:href="@{styles/css/main.css}" />
+		<link rel="stylesheet" th:href="@{../styles/css/main.css}" />
 	</head>
 	<body class="subpage">
 		<div id="page-wrapper">
@@ -22,10 +22,10 @@
 								<header>
 									<h2>Major cities</h2>
 								</header>
-								<span th:each="expansion : ${expansionList}">
+								<span th:each="expansion : ${expansions}">
 									<h3 th:text="${expansion.getName()}"></h3>
 									<ul class="link-list">
-										<span th:each="city : ${majorCitiesList}">
+										<span th:each="city : ${majorCities}">
 											<li th:if="${city.getExpansion().getName().equals(expansion.getName())}">
 												<img th:src="@{../images/majorcities/{imagename}(imagename=${city.getImageName()})}" />
 												<span th:text="${city.getName()}"></span>
@@ -39,10 +39,10 @@
 								<header>
 									<h2>Minor cities</h2>
 								</header>
-								<span th:each="expansion : ${expansionList}">
+								<span th:each="expansion : ${expansions}">
 									<h3 th:text="${expansion.getName()}"></h3>
 									<ul class="link-list">
-										<span th:each="city : ${minorCitiesList}">
+										<span th:each="city : ${minorCities}">
 											<li th:if="${city.getExpansion().getName().equals(expansion.getName())}" th:text="${city.getName()}"></li>
 										</span>
 									</ul>
