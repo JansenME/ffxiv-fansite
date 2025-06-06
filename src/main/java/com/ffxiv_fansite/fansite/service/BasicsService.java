@@ -1,5 +1,6 @@
 package com.ffxiv_fansite.fansite.service;
 
+import com.ffxiv_fansite.fansite.configuration.ExecutionTimeLogger;
 import com.ffxiv_fansite.fansite.model.Crafter;
 import com.ffxiv_fansite.fansite.model.Expansion;
 import com.ffxiv_fansite.fansite.model.Gatherer;
@@ -26,18 +27,22 @@ import java.util.List;
 @Slf4j
 @Service
 public class BasicsService {
+    @ExecutionTimeLogger
     public List<Expansion> getExpansions() {
         return Arrays.stream(Expansion.values()).toList();
     }
 
+    @ExecutionTimeLogger
     public List<MajorCity> getMajorCities() {
         return Arrays.stream(MajorCity.values()).toList();
     }
 
+    @ExecutionTimeLogger
     public List<MinorCity> getMinorCities() {
         return Arrays.stream(MinorCity.values()).toList();
     }
 
+    @ExecutionTimeLogger
     public List<Job> getJobs() {
         List<String[]> csvLines = readCsv("jobs.csv");
 
@@ -48,6 +53,7 @@ public class BasicsService {
                 .toList();
     }
 
+    @ExecutionTimeLogger
     public List<Crafter> getCrafters() {
         List<String[]> csvLines = readCsv("crafters.csv");
 
@@ -58,6 +64,7 @@ public class BasicsService {
                 .toList();
     }
 
+    @ExecutionTimeLogger
     public List<Gatherer> getGatherers() {
         List<String[]> csvLines = readCsv("gatherers.csv");
 
@@ -68,10 +75,12 @@ public class BasicsService {
                 .toList();
     }
 
+    @ExecutionTimeLogger
     public List<Region> getRegions() {
         return Arrays.stream(Region.values()).toList();
     }
 
+    @ExecutionTimeLogger
     public List<Zone> getZones() {
         return Arrays.stream(Zone.values()).toList();
     }
