@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Final Fantasy Fan Site</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" th:href="@{../styles/css/main.css}" />
+</head>
+<body class="subpage">
+<div id="page-wrapper">
+	<section id="header">
+		<div th:insert="~{inserts/nav :: nav}" class="container"></div>
+	</section>
+
+	<section id="content">
+		<div class="container">
+			<div class="row">
+				<div th:insert="~{inserts/nav-basics :: nav-basics}" class="col-3 col-12-medium"></div>
+
+				<div class="col-9 col-12-medium imp-medium">
+					<section>
+						<header>
+							<h2>Teleport - Aetherytes</h2>
+						</header>
+
+						<span th:each="aetherytesByRegion : ${aetherytesByRegion}">
+							<h3 th:text="${aetherytesByRegion.key.getName()}"></h3>
+							<table>
+								<thead>
+									<tr>
+										<th>Zone</th>
+										<th>Aetheryte</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="aetheryte : ${aetherytesByRegion.value}">
+										<td th:text="${aetheryte.getZone().getName()}"></td>
+										<td th:text="${aetheryte.getName()}"></td>
+									</tr>
+								</tbody>
+							</table>
+							<br />
+						</span>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div th:insert="~{inserts/copyright :: copyright}" id="copyright">
+	</div>
+</div>
+</body>
+</html>

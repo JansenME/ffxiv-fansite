@@ -387,6 +387,7 @@ table tbody tr:last-child {
 }
 table td, table th {
     text-align: left;
+    padding-left: 10px;
 }
 
 table img {

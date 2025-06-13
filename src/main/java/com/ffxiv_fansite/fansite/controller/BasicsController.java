@@ -60,4 +60,13 @@ public class BasicsController {
 
         return "basics-zones";
     }
+
+    @GetMapping("aetherytes")
+    public String basicsAetherytes(Model model) {
+        commonsService.fillModel(model);
+
+        model.addAttribute("aetherytesByRegion", basicsService.getAetherytesByRegion());
+
+        return "basics-aetherytes";
+    }
 }
