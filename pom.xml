@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.5.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<packaging>war</packaging>
@@ -30,7 +30,7 @@
 		<lombok.version>1.18.38</lombok.version>
 		<httpclient.version>4.5.14</httpclient.version>
 		<commonscsv.version>1.14.0</commonscsv.version>
-		<commonslang.version>3.17.0</commonslang.version>
+		<commonslang.version>3.18.0</commonslang.version>
 		<opencsv.version>5.11</opencsv.version>
 		<junit.version>4.13.2</junit.version>
 	</properties>

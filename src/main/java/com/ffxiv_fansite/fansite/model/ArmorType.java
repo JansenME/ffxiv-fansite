@@ -10,7 +10,8 @@ public enum ArmorType {
     CASTING("Casting"),
     MAIMING("Maiming"),
     STRIKING("Striking"),
-    SCOUTING("Scouting");
+    SCOUTING("Scouting"),
+    NON_EXISTING("Non existing");
 
     private final String name;
 
@@ -27,7 +28,7 @@ public enum ArmorType {
             case "Maiming" -> ArmorType.MAIMING;
             case "Striking" -> ArmorType.STRIKING;
             case "Scouting" -> ArmorType.SCOUTING;
-            default -> null;
+            default -> ArmorType.NON_EXISTING;
         };
     }
 }
